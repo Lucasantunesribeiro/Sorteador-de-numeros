@@ -8,44 +8,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>Sorteador de números</title>
+    <title>Jogos de Lógica</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="container__conteudo">
-            <div class="container__informacoes">
-                <div class="container__texto">
-                    <h1>Sorteador<span class="container__texto-azul"> de números</span></h1>
-
-                    <div class="container__campo">
-                        <label class="texto__paragrafo">Quantidade de números</label>
-                        <input class="container__input" id="quantidade" type="number" min="1">
-                    </div>
-                    
-                    <div class="container__campo">
-                        <label class="texto__paragrafo">Do número</label>
-                        <input class="container__input" id="de" type="number" min="1">
-                    </div>
-                    
-                    <div class="container__campo">
-                        <label class="texto__paragrafo">Até o número</label>
-                        <input class="container__input" id="ate" type="number" min="1">
-                    </div>
-                </div>
-                
-                <div class="chute container__botoes">
-                    <button onclick="sortear()" id="btn-sortear" class="container__botao">Sortear</button>
-                    <button onclick="reiniciar()" id="btn-reiniciar" class="container__botao-desabilitado" >Reiniciar</button>
-                </div>
-
-                <div class="container__texto" id="resultado">
-                    <label class="texto__paragrafo">Números sorteados:  nenhum até agora</label>
-                </div>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar__avatar">
+                <img src="./img/ia.png" alt="Mascote IA" />
             </div>
-
-            <img src="./img/ia.png" alt="Uma pessoa com capacete de astronauta" class="container__imagem-pessoa" />
-        </div>
+            <nav class="sidebar__menu">
+                <button class="menu-btn active" data-game="sorteador">Sorteador</button>
+                <button class="menu-btn" data-game="adivinhacao">Adivinhação</button>
+                <button class="menu-btn" data-game="parimpar">Par ou Ímpar</button>
+                <button class="menu-btn" data-game="roleta">Roleta</button>
+                <button class="menu-btn" data-game="vinteum">21</button>
+            </nav>
+        </aside>
+        <section class="content">
+            <div id="game-sorteador" class="game-section active">
+                <!-- Sorteador de números -->
+            </div>
+            <div id="game-adivinhacao" class="game-section">
+                <!-- Jogo de adivinhação -->
+            </div>
+            <div id="game-parimpar" class="game-section">
+                <!-- Par ou Ímpar -->
+            </div>
+            <div id="game-roleta" class="game-section">
+                <!-- Roleta -->
+            </div>
+            <div id="game-vinteum" class="game-section">
+                <!-- Jogo do 21 -->
+            </div>
+        </section>
     </div>
 
     <script src="app.js" defer></script>
