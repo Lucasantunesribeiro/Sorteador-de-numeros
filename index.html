@@ -1,50 +1,316 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Games Suite - Interactive Gaming Platform</title>
+    <meta name="description" content="Uma suíte completa de jogos de lógica com design moderno, estatísticas avançadas e experiência gamificada">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>Jogos de Lógica</title>
 </head>
-
 <body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">LG</div>
+                <span>Logic Games Suite</span>
+            </div>
+            <div class="nav-controls">
+                <button class="control-btn" id="soundToggle" title="Toggle Sound">
+                    🔊
+                </button>
+                <button class="control-btn" id="themeToggle" title="Toggle Theme">
+                    🌙
+                </button>
+                <button class="control-btn" id="fullscreenToggle" title="Toggle Fullscreen">
+                    ⛶
+                </button>
+            </div>
+        </div>
+    </nav>
+
     <div class="main-container">
         <aside class="sidebar">
-            <div class="sidebar__avatar">
-                <img src="./img/ia.png" alt="Mascote IA" />
+            <div class="sidebar-header">
+                <div class="sidebar-title">Game Selection</div>
+                <div class="sidebar-subtitle">Choose your challenge</div>
             </div>
-            <nav class="sidebar__menu">
-                <button class="menu-btn active" data-game="sorteador">Sorteador</button>
-                <button class="menu-btn" data-game="adivinhacao">Adivinhação</button>
-                <button class="menu-btn" data-game="parimpar">Par ou Ímpar</button>
-                <button class="menu-btn" data-game="roleta">Roleta</button>
-                <button class="menu-btn" data-game="vinteum">21</button>
-            </nav>
+
+            <div class="game-menu">
+                <button class="game-btn active" data-game="dashboard">
+                    <span class="game-icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="game-btn" data-game="number-guess">
+                    <span class="game-icon">🎯</span>
+                    <span>Number Guess</span>
+                </button>
+                <button class="game-btn" data-game="memory">
+                    <span class="game-icon">🧠</span>
+                    <span>Memory Game</span>
+                </button>
+                <button class="game-btn" data-game="rng">
+                    <span class="game-icon">🎲</span>
+                    <span>Random Generator</span>
+                </button>
+                <button class="game-btn" data-game="odd-even">
+                    <span class="game-icon">⚖️</span>
+                    <span>Odd or Even</span>
+                </button>
+                <button class="game-btn" data-game="reaction">
+                    <span class="game-icon">⚡</span>
+                    <span>Reaction Time</span>
+                </button>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stats-title">Quick Stats</div>
+                <div class="stat-item">
+                    <span>Games Played</span>
+                    <span class="stat-value" id="totalGames">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Win Rate</span>
+                    <span class="stat-value" id="winRate">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span>Best Streak</span>
+                    <span class="stat-value" id="bestStreak">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Achievements</span>
+                    <span class="stat-value" id="achievements">0</span>
+                </div>
+            </div>
         </aside>
-        <section class="content">
-            <div id="game-sorteador" class="game-section active">
-                <!-- Sorteador de números -->
-            </div>
-            <div id="game-adivinhacao" class="game-section">
-                <!-- Jogo de adivinhação -->
-            </div>
-            <div id="game-parimpar" class="game-section">
-                <!-- Par ou Ímpar -->
-            </div>
-            <div id="game-roleta" class="game-section">
-                <!-- Roleta -->
-            </div>
-            <div id="game-vinteum" class="game-section">
-                <!-- Jogo do 21 -->
-            </div>
-        </section>
+
+        <main class="content">
+            <!-- Dashboard -->
+            <section class="game-section active" id="dashboard">
+                <div class="game-header">
+                    <h1 class="game-title">Welcome to Logic Games Suite</h1>
+                    <p class="game-description">Challenge your mind with our collection of interactive logic games. Track your progress, compete with yourself, and improve your cognitive skills.</p>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="dashTotalGames">0</div>
+                        <div class="stat-label">Total Games</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dashWins">0</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dashStreak">0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dashTime">0</div>
+                        <div class="stat-label">Play Time (min)</div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <h3>Recent Achievements</h3>
+                    <div id="recentAchievements">
+                        <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Play games to unlock achievements!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Number Guessing Game -->
+            <section class="game-section" id="number-guess">
+                <div class="game-header">
+                    <h1 class="game-title">Number Guessing Game</h1>
+                    <p class="game-description">I'm thinking of a number between 1 and 100. Can you guess it?</p>
+                </div>
+
+                <div class="game-card">
+                    <div class="guess-container">
+                        <div class="game-stats">
+                            <div class="stat-card">
+                                <div class="stat-number" id="guessAttempts">0</div>
+                                <div class="stat-label">Attempts</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="guessRange">1-100</div>
+                                <div class="stat-label">Range</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="guessBest">-</div>
+                                <div class="stat-label">Best Score</div>
+                            </div>
+                        </div>
+
+                        <div class="guess-input-group">
+                            <input type="number" class="input-field" id="guessInput" placeholder="Enter your guess..." min="1" max="100">
+                            <button class="btn" id="guessSubmit">Guess</button>
+                        </div>
+
+                        <div id="guessHint" class="hint" style="display: none;"></div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="guessProgress" style="width: 0%;"></div>
+                        </div>
+
+                        <button class="btn btn-secondary" id="guessNewGame">New Game</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Game -->
+            <section class="game-section" id="memory">
+                <div class="game-header">
+                    <h1 class="game-title">Memory Challenge</h1>
+                    <p class="game-description">Match all the pairs to win! Test your memory skills.</p>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="memoryMoves">0</div>
+                            <div class="stat-label">Moves</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="memoryTime">00:00</div>
+                            <div class="stat-label">Time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="memoryPairs">0/8</div>
+                            <div class="stat-label">Pairs Found</div>
+                        </div>
+                    </div>
+
+                    <div class="memory-grid" id="memoryGrid"></div>
+
+                    <div style="text-align: center;">
+                        <button class="btn" id="memoryNewGame">New Game</button>
+                        <button class="btn btn-secondary" id="memoryHint">💡 Hint</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Random Number Generator -->
+            <section class="game-section" id="rng">
+                <div class="game-header">
+                    <h1 class="game-title">Random Number Generator</h1>
+                    <p class="game-description">Generate random numbers within your specified range</p>
+                </div>
+
+                <div class="game-card">
+                    <div class="rng-container">
+                        <div class="rng-controls">
+                            <div>
+                                <label for="rngMin">Minimum:</label>
+                                <input type="number" class="input-field" id="rngMin" value="1">
+                            </div>
+                            <div>
+                                <label for="rngMax">Maximum:</label>
+                                <input type="number" class="input-field" id="rngMax" value="100">
+                            </div>
+                        </div>
+
+                        <div class="rng-result" id="rngResult">?</div>
+
+                        <button class="btn" id="rngGenerate">🎲 Generate Random Number</button>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h4>Generation History</h4>
+                            <div id="rngHistory" style="margin-top: 1rem; min-height: 100px; background: var(--surface); border-radius: var(--border-radius); padding: 1rem;">
+                                <p style="color: var(--text-muted); text-align: center;">No numbers generated yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Odd or Even Game -->
+            <section class="game-section" id="odd-even">
+                <div class="game-header">
+                    <h1 class="game-title">Odd or Even Challenge</h1>
+                    <p class="game-description">Guess if the next number will be odd or even!</p>
+                </div>
+
+                <div class="game-card">
+                    <div class="guess-container">
+                        <div class="game-stats">
+                            <div class="stat-card">
+                                <div class="stat-number" id="oeScore">0</div>
+                                <div class="stat-label">Score</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="oeStreak">0</div>
+                                <div class="stat-label">Streak</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="oeBest">0</div>
+                                <div class="stat-label">Best Streak</div>
+                            </div>
+                        </div>
+
+                        <div style="margin: 2rem 0;">
+                            <div style="font-size: 3rem; margin: 1rem 0;" id="oeNumber">?</div>
+                            <p>Will the next number be odd or even?</p>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; justify-content: center; margin: 2rem 0;">
+                            <button class="btn" id="guessOdd" style="background: var(--gradient-secondary);">📝 Odd</button>
+                            <button class="btn" id="guessEven" style="background: var(--gradient-success);">📄 Even</button>
+                        </div>
+
+                        <div id="oeResult" style="min-height: 60px; display: flex; align-items: center; justify-content: center;"></div>
+
+                        <button class="btn btn-secondary" id="oeNewGame">New Game</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reaction Time Game -->
+            <section class="game-section" id="reaction">
+                <div class="game-header">
+                    <h1 class="game-title">Reaction Time Test</h1>
+                    <p class="game-description">Test your reflexes! Click as fast as you can when the screen turns green.</p>
+                </div>
+
+                <div class="game-card">
+                    <div class="guess-container">
+                        <div class="game-stats">
+                            <div class="stat-card">
+                                <div class="stat-number" id="reactionTime">0ms</div>
+                                <div class="stat-label">Last Time</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="reactionAverage">0ms</div>
+                                <div class="stat-label">Average</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="reactionBest">-</div>
+                                <div class="stat-label">Best Time</div>
+                            </div>
+                        </div>
+
+                        <div id="reactionArea" class="game-card" style="height: 300px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 2rem 0; transition: var(--transition);">
+                            <div id="reactionText" style="text-align: center;">
+                                <h3>Click to Start</h3>
+                                <p style="color: var(--text-muted);">Wait for green, then click!</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; justify-content: center;">
+                            <button class="btn" id="reactionStart">Start Test</button>
+                            <button class="btn btn-secondary" id="reactionReset">Reset Stats</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <script src="app.js" defer></script>
-</body>
+    <div class="toast-container" id="toastContainer"></div>
 
+    <script src="app.js"></script>
+</body>
 </html>
