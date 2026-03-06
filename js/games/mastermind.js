@@ -43,7 +43,7 @@ export function initMastermind() {
   const palette = document.getElementById('mmPalette');
   if (palette) {
     palette.addEventListener('click', (e) => {
-      const peg = e.target.closest('.color-peg');
+      const peg = e.target.closest('.mm-peg');
       if (peg && state.isPlaying) {
         const colorIdx = parseInt(peg.dataset.colorIdx);
         const colorId = state.activeColors[colorIdx].id;
@@ -83,8 +83,8 @@ export function initMastermind() {
 
   // Allow clicking current row slots to remove color
   document.getElementById('mmCurrentRow').addEventListener('click', (e) => {
-    const slot = e.target.closest('.color-peg');
-    if (slot && !slot.classList.contains('empty') && state.isPlaying && state.mode === 'player_guess') {
+    const slot = e.target.closest('.mm-peg');
+    if (slot && !slot.classList.contains('mm-peg-empty') && state.isPlaying && state.mode === 'player_guess') {
       const index = Array.from(slot.parentNode.children).indexOf(slot);
       state.currentGuess[index] = null;
       renderCurrentRow();
@@ -93,8 +93,8 @@ export function initMastermind() {
   });
 
   document.getElementById('mmSetupRow').addEventListener('click', (e) => {
-    const slot = e.target.closest('.color-peg');
-    if (slot && !slot.classList.contains('empty') && state.mode === 'pc_guess') {
+    const slot = e.target.closest('.mm-peg');
+    if (slot && !slot.classList.contains('mm-peg-empty') && state.mode === 'pc_guess') {
       const index = Array.from(slot.parentNode.children).indexOf(slot);
       state.secret[index] = null;
       renderSetupRow();
@@ -167,8 +167,8 @@ function renderPalette() {
   palette.innerHTML = '';
   state.activeColors.forEach((color, i) => {
     const peg = document.createElement('div');
-    peg.className = 'color-peg interactive';
-    peg.style.backgroundColor = color.hex;
+    peg.className = 'mm-peg interactive';
+    peg.style.setProperty('--peg-color', color.hex);
     peg.dataset.colorIdx = i;
     peg.title = color.label;
     palette.appendChild(peg);
@@ -182,10 +182,10 @@ function renderRow(containerId, colors, isStatic = false) {
     const peg = document.createElement('div');
     if (colorId) {
       const color = ALL_COLORS.find(c => c.id === colorId);
-      peg.className = 'color-peg';
-      peg.style.backgroundColor = color.hex;
+      peg.className = 'mm-peg filled';
+      peg.style.setProperty('--peg-color', color.hex);
     } else {
-      peg.className = 'color-peg empty';
+      peg.className = 'mm-peg mm-peg-empty';
     }
     container.appendChild(peg);
   });
@@ -285,7 +285,7 @@ function renderBoardRow(turnNum, guess, feedback) {
   html += `<div class="mm-pegs">`;
   guess.forEach(colorId => {
     const color = ALL_COLORS.find(c => c.id === colorId);
-    html += `<div class="color-peg" style="background-color: ${color.hex}"></div>`;
+    html += `<div class="mm-peg filled" style="--peg-color: ${color.hex}"></div>`;
   });
   html += `</div>`;
 
@@ -312,8 +312,8 @@ function endMastermindGame(win) {
   state.secret.forEach(colorId => {
     const color = ALL_COLORS.find(c => c.id === colorId);
     const peg = document.createElement('div');
-    peg.className = 'color-peg';
-    peg.style.backgroundColor = color.hex;
+    peg.className = 'mm-peg filled';
+    peg.style.setProperty('--peg-color', color.hex);
     secretRow.appendChild(peg);
   });
   document.getElementById('mmSecretReveal').style.display = 'block';
