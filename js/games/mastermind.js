@@ -204,6 +204,11 @@ function renderSetupRow() {
 }
 
 function addPegToGuess(colorId) {
+  // Prevent duplicate colors in the same guess
+  if (state.currentGuess.includes(colorId)) {
+    audio.play('error');
+    return;
+  }
   const firstEmpty = state.currentGuess.indexOf(null);
   if (firstEmpty !== -1) {
     state.currentGuess[firstEmpty] = colorId;
@@ -213,6 +218,11 @@ function addPegToGuess(colorId) {
 }
 
 function addPegToSetup(colorId) {
+  // Prevent duplicate colors in the secret code setup
+  if (state.secret.includes(colorId)) {
+    audio.play('error');
+    return;
+  }
   const firstEmpty = state.secret.indexOf(null);
   if (firstEmpty !== -1) {
     state.secret[firstEmpty] = colorId;
@@ -228,25 +238,28 @@ function evaluateGuess(guess, secret) {
   const secretCopy = [...secret];
   const guessCopy = [...guess];
 
-  // Check for blacks
+  // Logic analysis:
+  // 1. First Pass (Blacks): Matches must be identical color AND position.
   for (let i = 0; i < guessCopy.length; i++) {
-    if (guessCopy[i] === secretCopy[i]) {
+    if (guessCopy[i] !== null && guessCopy[i] === secretCopy[i]) {
       blacks++;
-      secretCopy[i] = null;
-      guessCopy[i] = null;
+      secretCopy[i] = "MATCHED"; // Mark as used
+      guessCopy[i] = "MATCHED";
     }
   }
 
-  // Check for whites
+  // 2. Second Pass (Whites): Matches remaining colors in different positions.
   for (let i = 0; i < guessCopy.length; i++) {
-    if (guessCopy[i] === null) continue;
+    if (guessCopy[i] === "MATCHED" || guessCopy[i] === null) continue;
+
     const idx = secretCopy.indexOf(guessCopy[i]);
     if (idx !== -1) {
       whites++;
-      secretCopy[idx] = null;
+      secretCopy[idx] = "MATCHED"; // Mark as used
     }
   }
 
+  console.log(`[Mastermind Debug] Secret: ${secret} | Guess: ${guess} | Result: Blacks=${blacks}, Whites=${whites}`);
   return { blacks, whites };
 }
 
