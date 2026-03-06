@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logic Games Suite - Interactive Gaming Platform</title>
-    <meta name="description" content="Uma suíte completa de jogos de lógica com design moderno, estatísticas avançadas e experiência gamificada">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="description" content="Uma suite completa de jogos de logica com design premium, estatisticas avancadas e experiencia gamificada">
+    <title>Logic Games Suite</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -18,15 +20,9 @@
                 <span>Logic Games Suite</span>
             </div>
             <div class="nav-controls">
-                <button class="control-btn" id="soundToggle" title="Toggle Sound">
-                    🔊
-                </button>
-                <button class="control-btn" id="themeToggle" title="Toggle Theme">
-                    🌙
-                </button>
-                <button class="control-btn" id="fullscreenToggle" title="Toggle Fullscreen">
-                    ⛶
-                </button>
+                <button class="control-btn" id="soundToggle" title="Toggle Sound">🔊</button>
+                <button class="control-btn" id="themeToggle" title="Toggle Theme">☀️</button>
+                <button class="control-btn" id="fullscreenToggle" title="Fullscreen">⛶</button>
             </div>
         </div>
     </nav>
@@ -40,28 +36,25 @@
 
             <div class="game-menu">
                 <button class="game-btn active" data-game="dashboard">
-                    <span class="game-icon">📊</span>
-                    <span>Dashboard</span>
+                    <span class="game-icon">📊</span><span>Dashboard</span>
                 </button>
                 <button class="game-btn" data-game="number-guess">
-                    <span class="game-icon">🎯</span>
-                    <span>Number Guess</span>
+                    <span class="game-icon">🎯</span><span>Number Guess</span>
                 </button>
                 <button class="game-btn" data-game="memory">
-                    <span class="game-icon">🧠</span>
-                    <span>Memory Game</span>
+                    <span class="game-icon">🧠</span><span>Memory Game</span>
                 </button>
                 <button class="game-btn" data-game="rng">
-                    <span class="game-icon">🎲</span>
-                    <span>Random Generator</span>
+                    <span class="game-icon">🎲</span><span>Random Generator</span>
                 </button>
                 <button class="game-btn" data-game="odd-even">
-                    <span class="game-icon">⚖️</span>
-                    <span>Odd or Even</span>
+                    <span class="game-icon">⚖️</span><span>Odd or Even</span>
                 </button>
                 <button class="game-btn" data-game="reaction">
-                    <span class="game-icon">⚡</span>
-                    <span>Reaction Time</span>
+                    <span class="game-icon">⚡</span><span>Reaction Time</span>
+                </button>
+                <button class="game-btn" data-game="mastermind">
+                    <span class="game-icon">🔐</span><span>Mastermind</span>
                 </button>
             </div>
 
@@ -87,36 +80,23 @@
         </aside>
 
         <main class="content">
+
             <!-- Dashboard -->
             <section class="game-section active" id="dashboard">
                 <div class="game-header">
-                    <h1 class="game-title">Welcome to Logic Games Suite</h1>
-                    <p class="game-description">Challenge your mind with our collection of interactive logic games. Track your progress, compete with yourself, and improve your cognitive skills.</p>
+                    <h1 class="game-title">Logic Games Suite</h1>
+                    <p class="game-description">Desafie sua mente com nossa colecao de jogos de logica interativos. Acompanhe seu progresso e melhore suas habilidades cognitivas.</p>
                 </div>
-
                 <div class="game-stats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="dashTotalGames">0</div>
-                        <div class="stat-label">Total Games</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="dashWins">0</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="dashStreak">0</div>
-                        <div class="stat-label">Current Streak</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="dashTime">0</div>
-                        <div class="stat-label">Play Time (min)</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-number" id="dashTotalGames">0</div><div class="stat-label">Total de Jogos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="dashWins">0</div><div class="stat-label">Vitorias</div></div>
+                    <div class="stat-card"><div class="stat-number" id="dashStreak">0</div><div class="stat-label">Streak Atual</div></div>
+                    <div class="stat-card"><div class="stat-number" id="dashTime">0</div><div class="stat-label">Tempo Jogado (min)</div></div>
                 </div>
-
                 <div class="game-card">
-                    <h3>Recent Achievements</h3>
+                    <h3>Conquistas Recentes</h3>
                     <div id="recentAchievements">
-                        <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Play games to unlock achievements!</p>
+                        <p class="empty-state">Jogue para desbloquear conquistas! 🎮</p>
                     </div>
                 </div>
             </section>
@@ -124,39 +104,23 @@
             <!-- Number Guessing Game -->
             <section class="game-section" id="number-guess">
                 <div class="game-header">
-                    <h1 class="game-title">Number Guessing Game</h1>
-                    <p class="game-description">I'm thinking of a number between 1 and 100. Can you guess it?</p>
+                    <h1 class="game-title">Number Guess</h1>
+                    <p class="game-description">Estou pensando em um numero entre 1 e 100. Voce consegue adivinhar? O calor da tela te guia!</p>
                 </div>
-
                 <div class="game-card">
                     <div class="guess-container">
                         <div class="game-stats">
-                            <div class="stat-card">
-                                <div class="stat-number" id="guessAttempts">0</div>
-                                <div class="stat-label">Attempts</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="guessRange">1-100</div>
-                                <div class="stat-label">Range</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="guessBest">-</div>
-                                <div class="stat-label">Best Score</div>
-                            </div>
+                            <div class="stat-card"><div class="stat-number" id="guessAttempts">0</div><div class="stat-label">Tentativas</div></div>
+                            <div class="stat-card"><div class="stat-number" id="guessRange">1-100</div><div class="stat-label">Intervalo</div></div>
+                            <div class="stat-card"><div class="stat-number" id="guessBest">-</div><div class="stat-label">Melhor</div></div>
                         </div>
-
                         <div class="guess-input-group">
-                            <input type="number" class="input-field" id="guessInput" placeholder="Enter your guess..." min="1" max="100">
-                            <button class="btn" id="guessSubmit">Guess</button>
+                            <input type="number" class="input-field" id="guessInput" placeholder="Digite seu palpite..." min="1" max="100">
+                            <button class="btn" id="guessSubmit">Adivinhar</button>
                         </div>
-
-                        <div id="guessHint" class="hint" style="display: none;"></div>
-
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="guessProgress" style="width: 0%;"></div>
-                        </div>
-
-                        <button class="btn btn-secondary" id="guessNewGame">New Game</button>
+                        <div id="guessHint" class="hint" style="display:none;"></div>
+                        <div class="progress-bar"><div class="progress-fill" id="guessProgress" style="width:0%"></div></div>
+                        <button class="btn btn-secondary" id="guessNewGame">Novo Jogo</button>
                     </div>
                 </div>
             </section>
@@ -165,30 +129,18 @@
             <section class="game-section" id="memory">
                 <div class="game-header">
                     <h1 class="game-title">Memory Challenge</h1>
-                    <p class="game-description">Match all the pairs to win! Test your memory skills.</p>
+                    <p class="game-description">Encontre todos os pares para vencer! Teste sua memoria.</p>
                 </div>
-
                 <div class="game-card">
                     <div class="game-stats">
-                        <div class="stat-card">
-                            <div class="stat-number" id="memoryMoves">0</div>
-                            <div class="stat-label">Moves</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="memoryTime">00:00</div>
-                            <div class="stat-label">Time</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="memoryPairs">0/8</div>
-                            <div class="stat-label">Pairs Found</div>
-                        </div>
+                        <div class="stat-card"><div class="stat-number" id="memoryMoves">0</div><div class="stat-label">Movimentos</div></div>
+                        <div class="stat-card"><div class="stat-number" id="memoryTime">00:00</div><div class="stat-label">Tempo</div></div>
+                        <div class="stat-card"><div class="stat-number" id="memoryPairs">0/8</div><div class="stat-label">Pares</div></div>
                     </div>
-
                     <div class="memory-grid" id="memoryGrid"></div>
-
-                    <div style="text-align: center;">
-                        <button class="btn" id="memoryNewGame">New Game</button>
-                        <button class="btn btn-secondary" id="memoryHint">💡 Hint</button>
+                    <div style="text-align:center; margin-top:1.5rem;">
+                        <button class="btn" id="memoryNewGame">Novo Jogo</button>
+                        <button class="btn btn-secondary" id="memoryHint">💡 Dica</button>
                     </div>
                 </div>
             </section>
@@ -196,31 +148,27 @@
             <!-- Random Number Generator -->
             <section class="game-section" id="rng">
                 <div class="game-header">
-                    <h1 class="game-title">Random Number Generator</h1>
-                    <p class="game-description">Generate random numbers within your specified range</p>
+                    <h1 class="game-title">Random Generator</h1>
+                    <p class="game-description">Gere numeros aleatorios dentro do intervalo que voce escolher</p>
                 </div>
-
                 <div class="game-card">
                     <div class="rng-container">
                         <div class="rng-controls">
                             <div>
-                                <label for="rngMin">Minimum:</label>
+                                <label for="rngMin">Minimo:</label>
                                 <input type="number" class="input-field" id="rngMin" value="1">
                             </div>
                             <div>
-                                <label for="rngMax">Maximum:</label>
+                                <label for="rngMax">Maximo:</label>
                                 <input type="number" class="input-field" id="rngMax" value="100">
                             </div>
                         </div>
-
-                        <div class="rng-result" id="rngResult">?</div>
-
-                        <button class="btn" id="rngGenerate">🎲 Generate Random Number</button>
-                        
-                        <div style="margin-top: 2rem;">
-                            <h4>Generation History</h4>
-                            <div id="rngHistory" style="margin-top: 1rem; min-height: 100px; background: var(--surface); border-radius: var(--border-radius); padding: 1rem;">
-                                <p style="color: var(--text-muted); text-align: center;">No numbers generated yet</p>
+                        <div class="rng-result bounce" id="rngResult">?</div>
+                        <button class="btn" id="rngGenerate">🎲 Gerar Numero</button>
+                        <div style="margin-top:2rem;">
+                            <h4>Historico</h4>
+                            <div id="rngHistory" class="rng-history-list">
+                                <p class="empty-state">Nenhum numero gerado ainda</p>
                             </div>
                         </div>
                     </div>
@@ -230,40 +178,27 @@
             <!-- Odd or Even Game -->
             <section class="game-section" id="odd-even">
                 <div class="game-header">
-                    <h1 class="game-title">Odd or Even Challenge</h1>
-                    <p class="game-description">Guess if the next number will be odd or even!</p>
+                    <h1 class="game-title">Odd or Even</h1>
+                    <p class="game-description">Adivinhe se o proximo numero sera par ou impar! O tempo diminui com seu streak!</p>
                 </div>
-
                 <div class="game-card">
                     <div class="guess-container">
                         <div class="game-stats">
-                            <div class="stat-card">
-                                <div class="stat-number" id="oeScore">0</div>
-                                <div class="stat-label">Score</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="oeStreak">0</div>
-                                <div class="stat-label">Streak</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="oeBest">0</div>
-                                <div class="stat-label">Best Streak</div>
-                            </div>
+                            <div class="stat-card"><div class="stat-number" id="oeScore">0</div><div class="stat-label">Pontos</div></div>
+                            <div class="stat-card"><div class="stat-number" id="oeStreak">0</div><div class="stat-label">Streak</div></div>
+                            <div class="stat-card"><div class="stat-number" id="oeBest">0</div><div class="stat-label">Melhor Streak</div></div>
                         </div>
-
-                        <div style="margin: 2rem 0;">
-                            <div style="font-size: 3rem; margin: 1rem 0;" id="oeNumber">?</div>
-                            <p>Will the next number be odd or even?</p>
+                        <div class="oe-timer-bar"><div class="oe-timer-fill" id="oeTimerFill"></div></div>
+                        <div class="oe-number-display">
+                            <div class="oe-number" id="oeNumber">?</div>
+                            <p class="oe-question">Par ou Impar?</p>
                         </div>
-
-                        <div style="display: flex; gap: 1rem; justify-content: center; margin: 2rem 0;">
-                            <button class="btn" id="guessOdd" style="background: var(--gradient-secondary);">📝 Odd</button>
-                            <button class="btn" id="guessEven" style="background: var(--gradient-success);">📄 Even</button>
+                        <div class="oe-buttons">
+                            <button class="btn btn-odd" id="guessOdd">Impar</button>
+                            <button class="btn btn-even" id="guessEven">Par</button>
                         </div>
-
-                        <div id="oeResult" style="min-height: 60px; display: flex; align-items: center; justify-content: center;"></div>
-
-                        <button class="btn btn-secondary" id="oeNewGame">New Game</button>
+                        <div id="oeResult" class="oe-result"></div>
+                        <button class="btn btn-secondary" id="oeNewGame">Novo Jogo</button>
                     </div>
                 </div>
             </section>
@@ -271,46 +206,71 @@
             <!-- Reaction Time Game -->
             <section class="game-section" id="reaction">
                 <div class="game-header">
-                    <h1 class="game-title">Reaction Time Test</h1>
-                    <p class="game-description">Test your reflexes! Click as fast as you can when the screen turns green.</p>
+                    <h1 class="game-title">Reaction Time</h1>
+                    <p class="game-description">Teste seus reflexos! Clique assim que a tela ficar verde.</p>
                 </div>
-
                 <div class="game-card">
                     <div class="guess-container">
                         <div class="game-stats">
-                            <div class="stat-card">
-                                <div class="stat-number" id="reactionTime">0ms</div>
-                                <div class="stat-label">Last Time</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="reactionAverage">0ms</div>
-                                <div class="stat-label">Average</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="reactionBest">-</div>
-                                <div class="stat-label">Best Time</div>
+                            <div class="stat-card"><div class="stat-number" id="reactionTime">0ms</div><div class="stat-label">Ultimo</div></div>
+                            <div class="stat-card"><div class="stat-number" id="reactionAverage">0ms</div><div class="stat-label">Media</div></div>
+                            <div class="stat-card"><div class="stat-number" id="reactionBest">-</div><div class="stat-label">Melhor</div></div>
+                        </div>
+                        <div id="reactionArea" class="reaction-area" data-state="idle">
+                            <div id="reactionText">
+                                <h3>Clique para Iniciar</h3>
+                                <p>Aguarde o verde, depois clique!</p>
                             </div>
                         </div>
-
-                        <div id="reactionArea" class="game-card" style="height: 300px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 2rem 0; transition: var(--transition);">
-                            <div id="reactionText" style="text-align: center;">
-                                <h3>Click to Start</h3>
-                                <p style="color: var(--text-muted);">Wait for green, then click!</p>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 1rem; justify-content: center;">
-                            <button class="btn" id="reactionStart">Start Test</button>
-                            <button class="btn btn-secondary" id="reactionReset">Reset Stats</button>
+                        <div style="display:flex;gap:1rem;justify-content:center;">
+                            <button class="btn" id="reactionStart">Iniciar Teste</button>
+                            <button class="btn btn-secondary" id="reactionReset">Resetar Stats</button>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <!-- Mastermind Game -->
+            <section class="game-section" id="mastermind">
+                <div class="game-header">
+                    <h1 class="game-title">Mastermind</h1>
+                    <p class="game-description">Decifre o codigo secreto de 4 cores em ate 10 turnos. Preto = cor e posicao corretas. Branco = cor correta, posicao errada.</p>
+                </div>
+                <div class="game-card mastermind-wrap">
+                    <div class="game-stats">
+                        <div class="stat-card"><div class="stat-number" id="mmTurn">1</div><div class="stat-label">Turno</div></div>
+                        <div class="stat-card"><div class="stat-number" id="mmBest">-</div><div class="stat-label">Melhor</div></div>
+                        <div class="stat-card"><div class="stat-number" id="mmWins">0</div><div class="stat-label">Vitorias</div></div>
+                    </div>
+
+                    <div class="mm-legend">
+                        <span class="mm-legend-item"><span class="mm-fb-peg black"></span> Cor + Posicao corretas</span>
+                        <span class="mm-legend-item"><span class="mm-fb-peg white"></span> Cor correta</span>
+                    </div>
+
+                    <div class="mm-board" id="mmBoard"></div>
+
+                    <div id="mmSecretReveal" style="display:none;"></div>
+
+                    <div class="mm-controls">
+                        <div class="mm-palette" id="mmPalette"></div>
+                        <div class="mm-current-row">
+                            <div class="mm-peg-slot" data-slot="0"></div>
+                            <div class="mm-peg-slot" data-slot="1"></div>
+                            <div class="mm-peg-slot" data-slot="2"></div>
+                            <div class="mm-peg-slot" data-slot="3"></div>
+                        </div>
+                        <button class="btn" id="mmSubmit" disabled>🔐 Confirmar</button>
+                    </div>
+                    <button class="btn btn-secondary" id="mmNewGame" style="margin-top:1rem;">↺ Novo Jogo</button>
+                </div>
+            </section>
+
         </main>
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <script src="app.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
