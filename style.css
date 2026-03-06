@@ -1132,9 +1132,10 @@ nav {
 }
 
 .mm-fb-peg.black {
-  background: #111;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  border-color: #333;
+  background: var(--accent-primary, #4ade80);
+  /* Verde para Cor+Posição */
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .mm-fb-peg.white {
@@ -1144,7 +1145,8 @@ nav {
 }
 
 .mm-fb-peg.empty {
-  background: transparent;
+  background: #111;
+  /* Preto para Vazio conforme solicitado */
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
