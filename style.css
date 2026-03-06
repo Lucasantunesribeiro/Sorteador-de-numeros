@@ -735,68 +735,217 @@ nav {
 .reaction-area #reactionText p  { color: var(--text-secondary); }
 
 /* ---------- Mastermind ---------- */
-.mastermind-wrap { max-width: 680px; margin: 0 auto; }
+.mastermind-wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; align-items: stretch;}
 
+/* Configurações */
+.mm-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-end;
+  background: var(--surface);
+  padding: 1.25rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+.mm-setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+.mm-setting-group label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.mm-select, .mm-input-number {
+  padding: 0.5rem 0.75rem;
+  width: auto;
+  min-width: 120px;
+}
+.mm-input-number {
+  max-width: 100px;
+  text-align: center;
+}
+
+/* Legenda */
 .mm-legend {
   display: flex;
   gap: 1.5rem;
-  margin: 0.75rem 0 1rem;
+  margin: 0.75rem auto 1rem;
   font-size: 0.8rem;
   color: var(--text-secondary);
+  justify-content: center;
 }
-
 .mm-legend-item {
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
+.mm-fb-peg {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.mm-fb-peg.black { background: #222; border: 1px solid #444; }
+.mm-fb-peg.white { background: #eee; border: 1px solid #ccc; }
 
+[data-theme="light"] .mm-fb-peg.black { background: #000; border: 1px solid #333; }
+[data-theme="light"] .mm-fb-peg.white { background: #fff; border: 1px solid #ccc; }
+
+/* Tabuleiro */
 .mm-board {
   min-height: 80px;
-  max-height: 340px;
+  max-height: 380px;
   overflow-y: auto;
   border-radius: 10px;
   background: var(--surface);
   border: 1px solid var(--border);
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
   font-family: var(--font-mono);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .mm-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   transition: background 0.2s;
+  background: rgba(0,0,0,0.15);
 }
 
 .mm-row-done { animation: fadeInUp 0.3s ease-out; }
 .mm-row-done:hover { background: var(--surface-hover); }
 
 .mm-turn-num {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: bold;
   color: var(--text-muted);
-  min-width: 18px;
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .mm-pegs {
   display: flex;
   gap: 0.5rem;
-  flex: 1;
+  justify-content: center;
 }
 
 .mm-peg {
-  width: 28px; height: 28px;
+  width: 32px; height: 32px;
   border-radius: 50%;
   background: var(--peg-color, #555);
   box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.25);
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.2s;
   flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mm-peg:hover { transform: scale(1.12); }
+.mm-peg-empty {
+  background: rgba(255,255,255,0.05);
+  border: 2px dashed var(--border);
+  box-shadow: none;
+}
+
+/* Painel de Controle (Paleta, Slot Atual) */
+.mm-controls, .mm-setup-secret {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mm-setup-secret h3 {
+  font-size: 1.1rem;
+  color: var(--accent-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.mm-palette {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(0,0,0,0.2);
+  border-radius: 50px;
+}
+
+.mm-palette .mm-peg {
+  width: 36px; height: 36px;
+  border: 2px solid transparent;
+}
+.mm-palette .mm-peg.selected {
+  border-color: #fff;
+  transform: scale(1.15);
+  box-shadow: 0 0 12px var(--peg-color);
+}
+
+.mm-current-row {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(0,0,0,0.15);
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mm-current-row .mm-peg {
+  width: 40px; height: 40px;
+}
+
+/* Feedback (Preto/Branco) */
+.mm-feedback {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  width: 32px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+/* Adapta grid para quantidades maiores de pinos no Mastermind */
+.mm-feedback[data-slots="5"], .mm-feedback[data-slots="6"] { grid-template-columns: repeat(3, 1fr); width: 44px; }
+.mm-feedback[data-slots="7"], .mm-feedback[data-slots="8"] { grid-template-columns: repeat(4, 1fr); width: 56px; }
+.mm-feedback[data-slots="9"], .mm-feedback[data-slots="10"] { grid-template-columns: repeat(5, 1fr); width: 68px; }
+
+.mm-secret-reveal {
+  padding: 1.5rem;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  animation: bounceIn 0.5s ease;
+}
+.mm-secret-reveal h3 {
+  color: var(--accent-success);
+  margin-bottom: 1rem;
+}
+
 
 .mm-feedback {
   display: grid;

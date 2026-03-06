@@ -234,12 +234,32 @@
             <section class="game-section" id="mastermind">
                 <div class="game-header">
                     <h1 class="game-title">Mastermind</h1>
-                    <p class="game-description">Decifre o codigo secreto de 4 cores em ate 10 turnos. Preto = cor e posicao corretas. Branco = cor correta, posicao errada.</p>
+                    <p class="game-description">Decifre o codigo secreto de cores. Preto = cor e posicao corretas. Branco = cor correta, posicao errada.</p>
                 </div>
                 <div class="game-card mastermind-wrap">
+                    
+                    <div class="mm-settings">
+                        <div class="mm-setting-group">
+                            <label for="mmMode">Modo:</label>
+                            <select id="mmMode" class="input-field mm-select">
+                                <option value="player_guess">Jogador Decifra</option>
+                                <option value="pc_guess">PC Decifra</option>
+                            </select>
+                        </div>
+                        <div class="mm-setting-group">
+                            <label for="mmPegs">Pinos (4-10):</label>
+                            <input type="number" id="mmPegs" class="input-field mm-input-number" min="4" max="10" value="4">
+                        </div>
+                        <div class="mm-setting-group">
+                            <label for="mmColors">Cores (4-8):</label>
+                            <input type="number" id="mmColors" class="input-field mm-input-number" min="4" max="8" value="6">
+                        </div>
+                        <button class="btn btn-secondary" id="mmApplySettings">Aplicar</button>
+                    </div>
+
                     <div class="game-stats">
-                        <div class="stat-card"><div class="stat-number" id="mmTurn">1</div><div class="stat-label">Turno</div></div>
-                        <div class="stat-card"><div class="stat-number" id="mmBest">-</div><div class="stat-label">Melhor</div></div>
+                        <div class="stat-card"><div class="stat-number" id="mmTurn">1</div><div class="stat-label">Turno / Max: <span id="mmMaxTurns">10</span></div></div>
+                        <div class="stat-card"><div class="stat-number" id="mmBest">-</div><div class="stat-label">Melhor (Menos Tentativas)</div></div>
                         <div class="stat-card"><div class="stat-number" id="mmWins">0</div><div class="stat-label">Vitorias</div></div>
                     </div>
 
@@ -250,18 +270,26 @@
 
                     <div class="mm-board" id="mmBoard"></div>
 
-                    <div id="mmSecretReveal" style="display:none;"></div>
+                    <div id="mmSecretReveal" class="mm-secret-reveal" style="display:none;">
+                        <h3>Senha:</h3>
+                        <div class="mm-row" id="mmSecretRow"></div>
+                    </div>
+                    
+                    <!-- Area setup the password for PC Guess mode -->
+                    <div id="mmSetupSecret" class="mm-setup-secret" style="display: none;">
+                        <h3>Escolha a Senha para o PC Decifrar</h3>
+                        <div class="mm-current-row" id="mmSetupRow"></div>
+                        <button class="btn" id="mmConfirmSetup" disabled>Iniciar Jogo do PC</button>
+                    </div>
 
-                    <div class="mm-controls">
+                    <div class="mm-controls" id="mmControlsArea">
                         <div class="mm-palette" id="mmPalette"></div>
-                        <div class="mm-current-row">
-                            <div class="mm-peg-slot" data-slot="0"></div>
-                            <div class="mm-peg-slot" data-slot="1"></div>
-                            <div class="mm-peg-slot" data-slot="2"></div>
-                            <div class="mm-peg-slot" data-slot="3"></div>
+                        <div class="mm-current-row" id="mmCurrentRow">
+                            <!-- Slots gerados dinamicamente via JS -->
                         </div>
                         <button class="btn" id="mmSubmit" disabled>🔐 Confirmar</button>
                     </div>
+
                     <button class="btn btn-secondary" id="mmNewGame" style="margin-top:1rem;">↺ Novo Jogo</button>
                 </div>
             </section>

@@ -1,0 +1,7 @@
+[      31ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8081/js/audio.js:40
+[      31ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8081/js/audio.js:40
+[      32ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8081/js/audio.js:40
+[      32ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8081/js/audio.js:40
+[      40ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8081/js/audio.js:40
+[      72ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8081/img/icon-192.png:0
+[      73ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8081/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8081/:0
