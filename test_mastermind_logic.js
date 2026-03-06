@@ -1,7 +1,4 @@
 
-// Mock do estado e objetos necessários se houver dependência
-// Aqui testamos a função pura evaluateGuess
-
 function evaluateGuess(guess, secret) {
   let blacks = 0;
   let whites = 0;
@@ -28,15 +25,32 @@ function evaluateGuess(guess, secret) {
 }
 
 const tests = [
-  { secret: [1, 2, 3, 4], guess: [1, 2, 3, 4], expected: { blacks: 4, whites: 0 } },
-  { secret: [1, 2, 3, 4], guess: [4, 3, 2, 1], expected: { blacks: 0, whites: 4 } },
-  { secret: [1, 1, 2, 2], guess: [1, 2, 1, 1], expected: { blacks: 1, whites: 2 } },
-  { secret: [1, 2, 3, 4], guess: [1, 1, 1, 1], expected: { blacks: 1, whites: 0 } }, // Caso do usuário se a cor 1 tiver na senha
-  { secret: [2, 3, 4, 5], guess: [1, 1, 1, 1], expected: { blacks: 0, whites: 0 } }
+  // Senha Hipotética: Green, Yellow, Orange, Red (142, 48, 24, 0)
+  {
+    secret: ['green', 'yellow', 'orange', 'red'],
+    guess: ['red', 'blue', 'green', 'yellow'],
+    expected: { blacks: 0, whites: 3 },
+    label: "Usuário Turno 1 (Red, Blue, Green, Yellow) -> 3 Brancos (Red, Green, Yellow presentes)"
+  },
+  {
+    secret: ['green', 'yellow', 'orange', 'red'],
+    guess: ['orange', 'purple', 'yellow', 'green'],
+    expected: { blacks: 0, whites: 3 },
+    label: "Usuário Turno 2 (Orange, Purple, Yellow, Green) -> 3 Brancos? (Orange, Yellow, Green presentes)"
+  },
+  {
+    secret: ['green', 'yellow', 'orange', 'red'],
+    guess: ['red', 'blue', 'orange', 'purple'],
+    expected: { blacks: 1, whites: 1 },
+    label: "Usuário Turno 4 (Red, Blue, Orange, Purple) -> 1 Black (Orange), 1 White (Red)"
+  }
 ];
 
 tests.forEach((t, i) => {
   const res = evaluateGuess(t.guess, t.secret);
   const passed = res.blacks === t.expected.blacks && res.whites === t.expected.whites;
-  console.log(`Test ${i + 1}: ${passed ? 'PASSED' : 'FAILED'} | Secret: [${t.secret}] Guess: [${t.guess}] | Expected: B${t.expected.blacks} W${t.expected.whites} Got: B${res.blacks} W${res.whites}`);
+  console.log(`Test ${i + 1}: ${passed ? 'PASSED' : 'FAILED'} | ${t.label}`);
+  if (!passed) {
+    console.log(`  Expected: B${t.expected.blacks} W${t.expected.whites} | Got: B${res.blacks} W${res.whites}`);
+  }
 });

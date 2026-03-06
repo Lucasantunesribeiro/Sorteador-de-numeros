@@ -109,6 +109,13 @@ export function initMastermind() {
 // --- Logic Functions ---
 
 function applyMastermindSettings(isInitial = false) {
+  // If game is in progress, ask for confirmation before resetting
+  if (!isInitial && state.isPlaying && state.turn > 1) {
+    if (!confirm('Um jogo está em andamento. Deseja aplicar novas configurações e reiniciar?')) {
+      return;
+    }
+  }
+
   state.mode = document.getElementById('mmMode').value;
   state.pegs = parseInt(document.getElementById('mmPegs').value) || 4;
   state.colorsCount = parseInt(document.getElementById('mmColors').value) || 6;
