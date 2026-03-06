@@ -1117,17 +1117,18 @@ nav {
 /* Feedback Grid */
 .mm-feedback-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 5px;
-  width: 34px;
+  grid-template-columns: repeat(2, 8px);
+  grid-auto-rows: 8px;
+  gap: 8px;
+  width: auto;
   margin-left: auto;
 }
 
 .mm-fb-peg {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mm-fb-peg.black {
@@ -1144,7 +1145,7 @@ nav {
 
 .mm-fb-peg.empty {
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Área de Controles e Paleta */
@@ -1215,14 +1216,17 @@ nav {
   }
 }
 
-/* Legenda Inferior */
+/* Legenda Superior */
 .mm-legend {
   display: flex;
-  gap: 1.5rem;
-  font-size: 0.8rem;
+  gap: 2rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   justify-content: center;
-  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 50px;
 }
 
 .mm-legend-item {

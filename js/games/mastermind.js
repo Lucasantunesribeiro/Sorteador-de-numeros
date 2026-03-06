@@ -293,7 +293,10 @@ function renderBoardRow(turnNum, guess, feedback) {
   html += `<div class="mm-feedback-grid">`;
   for (let i = 0; i < feedback.blacks; i++) html += `<div class="mm-fb-peg black"></div>`;
   for (let i = 0; i < feedback.whites; i++) html += `<div class="mm-fb-peg white"></div>`;
-  const remaining = state.pegs - feedback.blacks - feedback.whites;
+
+  // Garante que o grid sempre tenha slots suficientes para manter a ordem 1-2 3-4
+  const displaySlots = Math.max(state.pegs, 4);
+  const remaining = displaySlots - feedback.blacks - feedback.whites;
   for (let i = 0; i < remaining; i++) html += `<div class="mm-fb-peg empty"></div>`;
   html += `</div>`;
 
