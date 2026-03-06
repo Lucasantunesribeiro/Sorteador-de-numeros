@@ -23,6 +23,16 @@
   --accent-warning: #f59e0b;
   --accent-danger: #ef4444;
 
+  /* Mastermind feedback tokens (dark) */
+  --mm-feedback-exact-bg: #020617;
+  --mm-feedback-exact-border: rgba(226, 232, 240, 0.9);
+  --mm-feedback-exact-shadow: 0 0 10px rgba(148, 163, 184, 0.45);
+  --mm-feedback-color-bg: #f8fafc;
+  --mm-feedback-color-border: #cbd5e1;
+  --mm-feedback-color-shadow: 0 0 8px rgba(248, 250, 252, 0.35);
+  --mm-feedback-miss-bg: rgba(148, 163, 184, 0.22);
+  --mm-feedback-miss-border: rgba(148, 163, 184, 0.7);
+
   --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
@@ -67,6 +77,16 @@
   --gradient-mesh:
     radial-gradient(ellipse at 15% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 55%);
+
+  /* Mastermind feedback tokens (light) */
+  --mm-feedback-exact-bg: #0f172a;
+  --mm-feedback-exact-border: rgba(71, 85, 105, 0.9);
+  --mm-feedback-exact-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);
+  --mm-feedback-color-bg: #ffffff;
+  --mm-feedback-color-border: #64748b;
+  --mm-feedback-color-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+  --mm-feedback-miss-bg: #e2e8f0;
+  --mm-feedback-miss-border: #94a3b8;
 }
 
 /* ---------- Reset ---------- */
@@ -1117,37 +1137,36 @@ nav {
 /* Feedback Grid */
 .mm-feedback-grid {
   display: grid;
-  grid-template-columns: repeat(2, 8px);
-  grid-auto-rows: 8px;
+  grid-template-columns: repeat(var(--mm-feedback-columns, 2), 10px);
+  grid-auto-rows: 10px;
   gap: 8px;
   width: auto;
   margin-left: auto;
 }
 
 .mm-fb-peg {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mm-fb-peg.black {
-  background: var(--accent-primary, #4ade80);
-  /* Verde para Cor+Posição */
-  box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--mm-feedback-exact-bg);
+  box-shadow: var(--mm-feedback-exact-shadow);
+  border-color: var(--mm-feedback-exact-border);
 }
 
 .mm-fb-peg.white {
-  background: #eee;
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-  border-color: #ccc;
+  background: var(--mm-feedback-color-bg);
+  box-shadow: var(--mm-feedback-color-shadow);
+  border-color: var(--mm-feedback-color-border);
 }
 
 .mm-fb-peg.empty {
-  background: #111;
-  /* Preto para Vazio conforme solicitado */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--mm-feedback-miss-bg);
+  border: 1px solid var(--mm-feedback-miss-border);
+  box-shadow: none;
 }
 
 /* Área de Controles e Paleta */
@@ -1223,8 +1242,9 @@ nav {
   display: flex;
   gap: 2rem;
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   justify-content: center;
+  flex-wrap: wrap;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   background: rgba(255, 255, 255, 0.02);

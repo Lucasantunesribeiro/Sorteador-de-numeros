@@ -1,56 +1,58 @@
+const assert = require('node:assert/strict');
 
-function evaluateGuess(guess, secret) {
-  let blacks = 0;
-  let whites = 0;
-  const secretCopy = [...secret];
-  const guessCopy = [...guess];
+async function run() {
+  const { evaluateGuess, generateSecretCode, generateAllCombinations } = await import('./js/games/mastermind.js');
 
-  for (let i = 0; i < guessCopy.length; i++) {
-    if (guessCopy[i] !== null && guessCopy[i] === secretCopy[i]) {
-      blacks++;
-      secretCopy[i] = "MATCHED";
-      guessCopy[i] = "MATCHED";
+  const scenarios = [
+    {
+      label: 'Mapeia feedback por peca (1-2 / 3-4)',
+      secret: ['green', 'yellow', 'orange', 'red'],
+      guess: ['red', 'blue', 'green', 'yellow'],
+      expected: { blacks: 0, whites: 3, slots: ['white', 'empty', 'white', 'white'] }
+    },
+    {
+      label: 'Acerto exato em posicao correta',
+      secret: ['green', 'yellow', 'orange', 'red'],
+      guess: ['green', 'purple', 'orange', 'blue'],
+      expected: { blacks: 2, whites: 0, slots: ['black', 'empty', 'black', 'empty'] }
+    },
+    {
+      label: 'Cores corretas em posicoes erradas',
+      secret: ['green', 'yellow', 'orange', 'red'],
+      guess: ['yellow', 'green', 'red', 'orange'],
+      expected: { blacks: 0, whites: 4, slots: ['white', 'white', 'white', 'white'] }
     }
+  ];
+
+  scenarios.forEach((scenario, idx) => {
+    const received = evaluateGuess(scenario.guess, scenario.secret);
+    assert.deepEqual(received, scenario.expected, `Falhou no cenario ${idx + 1}: ${scenario.label}`);
+  });
+
+  const colors = [
+    { id: 'red' },
+    { id: 'blue' },
+    { id: 'green' },
+    { id: 'yellow' },
+    { id: 'purple' },
+    { id: 'orange' }
+  ];
+  for (let i = 0; i < 50; i++) {
+    const secret = generateSecretCode(4, colors);
+    assert.equal(secret.length, 4, 'Senha deve ter 4 pecas');
+    assert.equal(new Set(secret).size, 4, 'Senha nao pode repetir cor');
   }
 
-  for (let i = 0; i < guessCopy.length; i++) {
-    if (guessCopy[i] === "MATCHED" || guessCopy[i] === null) continue;
-    const idx = secretCopy.indexOf(guessCopy[i]);
-    if (idx !== -1) {
-      whites++;
-      secretCopy[idx] = "MATCHED";
-    }
-  }
-  return { blacks, whites };
+  const combos = generateAllCombinations(4, ['red', 'blue', 'green', 'yellow']);
+  assert.equal(combos.length, 24, 'Permutacoes sem repeticao para 4 cores devem ser 24');
+  combos.forEach((combo, index) => {
+    assert.equal(new Set(combo).size, combo.length, `Combinacao ${index + 1} repetiu cor`);
+  });
+
+  console.log('Mastermind logic: todos os testes passaram.');
 }
 
-const tests = [
-  // Senha Hipotética: Green, Yellow, Orange, Red (142, 48, 24, 0)
-  {
-    secret: ['green', 'yellow', 'orange', 'red'],
-    guess: ['red', 'blue', 'green', 'yellow'],
-    expected: { blacks: 0, whites: 3 },
-    label: "Usuário Turno 1 (Red, Blue, Green, Yellow) -> 3 Brancos (Red, Green, Yellow presentes)"
-  },
-  {
-    secret: ['green', 'yellow', 'orange', 'red'],
-    guess: ['orange', 'purple', 'yellow', 'green'],
-    expected: { blacks: 0, whites: 3 },
-    label: "Usuário Turno 2 (Orange, Purple, Yellow, Green) -> 3 Brancos? (Orange, Yellow, Green presentes)"
-  },
-  {
-    secret: ['green', 'yellow', 'orange', 'red'],
-    guess: ['red', 'blue', 'orange', 'purple'],
-    expected: { blacks: 1, whites: 1 },
-    label: "Usuário Turno 4 (Red, Blue, Orange, Purple) -> 1 Black (Orange), 1 White (Red)"
-  }
-];
-
-tests.forEach((t, i) => {
-  const res = evaluateGuess(t.guess, t.secret);
-  const passed = res.blacks === t.expected.blacks && res.whites === t.expected.whites;
-  console.log(`Test ${i + 1}: ${passed ? 'PASSED' : 'FAILED'} | ${t.label}`);
-  if (!passed) {
-    console.log(`  Expected: B${t.expected.blacks} W${t.expected.whites} | Got: B${res.blacks} W${res.whites}`);
-  }
+run().catch(error => {
+  console.error(error);
+  process.exit(1);
 });

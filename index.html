@@ -234,7 +234,7 @@
             <section class="game-section" id="mastermind">
                 <div class="game-header">
                     <h1 class="game-title">Mastermind</h1>
-                    <p class="game-description">Decifre o codigo secreto de cores. Preto = cor e posicao corretas. Branco = cor correta, posicao errada.</p>
+                    <p class="game-description">Decifre o codigo secreto de cores (sem repeticao). Preto = cor e posicao corretas. Branco = cor correta, posicao errada.</p>
                 </div>
                 <div class="game-card mastermind-wrap">
                     
@@ -247,8 +247,8 @@
                             </select>
                         </div>
                         <div class="mm-setting-group">
-                            <label for="mmPegs">Pinos (4-10):</label>
-                            <input type="number" id="mmPegs" class="input-field mm-input-number" min="4" max="10" value="4">
+                            <label for="mmPegs">Pinos (4-8):</label>
+                            <input type="number" id="mmPegs" class="input-field mm-input-number" min="4" max="8" value="4">
                         </div>
                         <div class="mm-setting-group">
                             <label for="mmColors">Cores (4-8):</label>
@@ -266,6 +266,7 @@
                     <div class="mm-legend">
                         <span class="mm-legend-item"><span class="mm-fb-peg black"></span> Cor + Posicao corretas</span>
                         <span class="mm-legend-item"><span class="mm-fb-peg white"></span> Cor correta</span>
+                        <span class="mm-legend-item">Ordem por peca: 1-2 / 3-4 (1=1a peca, 2=2a...)</span>
                     </div>
 
                     <div class="mm-board" id="mmBoard"></div>

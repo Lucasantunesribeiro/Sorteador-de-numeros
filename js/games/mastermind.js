@@ -27,6 +27,9 @@ const state = {
   allPossibleCodes: [] // Used for AI
 };
 
+const FEEDBACK_BY_SLOT_MIN = 4;
+const FEEDBACK_COLUMNS = 2;
+
 // --- Initialization ---
 
 export function initMastermind() {
@@ -116,9 +119,26 @@ function applyMastermindSettings(isInitial = false) {
     }
   }
 
+  const pegsInput = document.getElementById('mmPegs');
+  const colorsInput = document.getElementById('mmColors');
+  const maxColors = ALL_COLORS.length;
+
   state.mode = document.getElementById('mmMode').value;
-  state.pegs = parseInt(document.getElementById('mmPegs').value) || 4;
-  state.colorsCount = parseInt(document.getElementById('mmColors').value) || 6;
+  state.pegs = Math.min(Math.max(parseInt(pegsInput.value, 10) || 4, 4), maxColors);
+  state.colorsCount = Math.min(Math.max(parseInt(colorsInput.value, 10) || 6, 4), maxColors);
+
+  if (state.pegs > state.colorsCount) {
+    state.pegs = state.colorsCount;
+    if (!isInitial) {
+      showToast('Pinos ajustados para evitar repeticao de cor.', 'warning');
+    }
+  }
+
+  pegsInput.max = String(maxColors);
+  colorsInput.max = String(maxColors);
+  pegsInput.value = String(state.pegs);
+  colorsInput.value = String(state.colorsCount);
+
   state.activeColors = ALL_COLORS.slice(0, state.colorsCount);
   state.maxTurns = state.pegs + (state.colorsCount - 4) + 6; // Balance turns based on difficulty
 
@@ -161,12 +181,23 @@ function newMastermindGame() {
   }
 }
 
-function generateSecretCode(len, colors) {
-  const code = [];
-  for (let i = 0; i < len; i++) {
-    code.push(colors[Math.floor(Math.random() * colors.length)].id);
+export function generateSecretCode(len, colors) {
+  const ids = colors.map(color => color.id);
+  return pickUniqueColors(len, ids);
+}
+
+function pickUniqueColors(len, colorIds) {
+  if (len > colorIds.length) {
+    throw new Error(`Nao ha cores suficientes para gerar ${len} pinos sem repeticao.`);
   }
-  return code;
+
+  const shuffled = [...colorIds];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled.slice(0, len);
 }
 
 function renderPalette() {
@@ -238,36 +269,36 @@ function addPegToSetup(colorId) {
   }
 }
 
-function evaluateGuess(guess, secret) {
-  let blacks = 0; // Correct color, correct position
-  let whites = 0; // Correct color, wrong position
+export function evaluateGuess(guess, secret) {
+  let blacks = 0;
+  let whites = 0;
+  const slots = Array(guess.length).fill('empty');
+  const remainingSecretCounts = new Map();
 
-  const secretCopy = [...secret];
-  const guessCopy = [...guess];
-
-  // Logic analysis:
-  // 1. First Pass (Blacks): Matches must be identical color AND position.
-  for (let i = 0; i < guessCopy.length; i++) {
-    if (guessCopy[i] !== null && guessCopy[i] === secretCopy[i]) {
+  // Primeiro, contabiliza acertos exatos e guarda cores restantes da senha.
+  for (let i = 0; i < guess.length; i++) {
+    if (guess[i] === secret[i]) {
       blacks++;
-      secretCopy[i] = "MATCHED"; // Mark as used
-      guessCopy[i] = "MATCHED";
+      slots[i] = 'black';
+    } else {
+      const current = remainingSecretCounts.get(secret[i]) || 0;
+      remainingSecretCounts.set(secret[i], current + 1);
     }
   }
 
-  // 2. Second Pass (Whites): Matches remaining colors in different positions.
-  for (let i = 0; i < guessCopy.length; i++) {
-    if (guessCopy[i] === "MATCHED" || guessCopy[i] === null) continue;
+  // Depois, avalia cada peça por posicao (1-2 / 3-4 / ...).
+  for (let i = 0; i < guess.length; i++) {
+    if (slots[i] === 'black' || guess[i] == null) continue;
 
-    const idx = secretCopy.indexOf(guessCopy[i]);
-    if (idx !== -1) {
+    const count = remainingSecretCounts.get(guess[i]) || 0;
+    if (count > 0) {
       whites++;
-      secretCopy[idx] = "MATCHED"; // Mark as used
+      slots[i] = 'white';
+      remainingSecretCounts.set(guess[i], count - 1);
     }
   }
 
-  console.log(`[Mastermind Debug] Secret: ${secret} | Guess: ${guess} | Result: Blacks=${blacks}, Whites=${whites}`);
-  return { blacks, whites };
+  return { blacks, whites, slots };
 }
 
 function submitPlayerGuess() {
@@ -310,14 +341,14 @@ function renderBoardRow(turnNum, guess, feedback) {
   html += `</div>`;
 
   // Feedback
-  html += `<div class="mm-feedback-grid">`;
-  for (let i = 0; i < feedback.blacks; i++) html += `<div class="mm-fb-peg black"></div>`;
-  for (let i = 0; i < feedback.whites; i++) html += `<div class="mm-fb-peg white"></div>`;
+  const feedbackSlots = Array.isArray(feedback.slots) ? feedback.slots : [];
+  const displaySlots = Math.max(guess.length, FEEDBACK_BY_SLOT_MIN);
 
-  // Garante que o grid sempre tenha slots suficientes para manter a ordem 1-2 3-4
-  const displaySlots = Math.max(state.pegs, 4);
-  const remaining = displaySlots - feedback.blacks - feedback.whites;
-  for (let i = 0; i < remaining; i++) html += `<div class="mm-fb-peg empty"></div>`;
+  html += `<div class="mm-feedback-grid" style="--mm-feedback-columns:${FEEDBACK_COLUMNS};" aria-label="Dicas por posicao">`;
+  for (let i = 0; i < displaySlots; i++) {
+    const slotStatus = feedbackSlots[i] || 'empty';
+    html += `<div class="mm-fb-peg ${slotStatus}" title="Peca ${i + 1}"></div>`;
+  }
   html += `</div>`;
 
   row.innerHTML = html;
@@ -378,30 +409,27 @@ function startPCDecipher() {
   runPCDecipherTurn();
 }
 
-function generateAllCombinations(len, colorIds) {
+export function generateAllCombinations(len, colorIds) {
   const results = [];
-  function backtrack(current) {
+  if (len > colorIds.length) return results;
+
+  function backtrack(current, used) {
     if (current.length === len) {
       results.push([...current]);
       return;
     }
-    for (const cId of colorIds) {
-      current.push(cId);
-      backtrack(current);
+
+    for (let i = 0; i < colorIds.length; i++) {
+      if (used[i]) continue;
+      used[i] = true;
+      current.push(colorIds[i]);
+      backtrack(current, used);
       current.pop();
+      used[i] = false;
     }
   }
-  if (len <= 5) { // Limitation for performance
-    backtrack([]);
-  } else {
-    // For >5 pegs, AI will be more "stochastic" or simpler (YAGNI for now, let's keep it simple)
-    // Just provide a few random combinations to avoid crashing
-    for (let i = 0; i < 5000; i++) {
-      const code = [];
-      for (let j = 0; j < len; j++) code.push(colorIds[Math.floor(Math.random() * colorIds.length)]);
-      results.push(code);
-    }
-  }
+
+  backtrack([], Array(colorIds.length).fill(false));
   return results;
 }
 
@@ -410,15 +438,8 @@ function runPCDecipherTurn() {
 
   // AI logic: take a guess from possible codes
   // Minimax simplified (Knuth's algorithm would be too heavy for large pegs, using a heuristic)
-  let guess;
-  if (state.turn === 1) {
-    // Initial guess (balanced)
-    guess = [];
-    const ids = state.activeColors.map(c => c.id);
-    for (let i = 0; i < state.pegs; i++) guess.push(ids[Math.floor(i / (state.pegs / 2)) % ids.length]);
-  } else {
-    guess = state.allPossibleCodes[Math.floor(Math.random() * state.allPossibleCodes.length)];
-  }
+  const randomIdx = Math.floor(Math.random() * state.allPossibleCodes.length);
+  const guess = state.allPossibleCodes[randomIdx] || pickUniqueColors(state.pegs, state.activeColors.map(c => c.id));
 
   const feedback = evaluateGuess(guess, state.secret);
 
@@ -439,6 +460,7 @@ function runPCDecipherTurn() {
     } else {
       // Filter possible codes
       state.allPossibleCodes = state.allPossibleCodes.filter(c => {
+        if (arraysEqual(c, guess)) return false;
         const f = evaluateGuess(guess, c);
         return f.blacks === feedback.blacks && f.whites === feedback.whites;
       });
@@ -448,4 +470,12 @@ function runPCDecipherTurn() {
       runPCDecipherTurn();
     }
   }, 1200);
+}
+
+function arraysEqual(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
 }
