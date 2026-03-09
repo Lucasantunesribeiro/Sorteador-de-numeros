@@ -270,7 +270,7 @@ function addPegToSetup(colorId) {
 }
 
 export function evaluateGuess(guess, secret) {
-  let blacks = 0;
+  let greens = 0;
   let whites = 0;
   const slots = Array(guess.length).fill('empty');
   const remainingSecretCounts = new Map();
@@ -278,8 +278,8 @@ export function evaluateGuess(guess, secret) {
   // Primeiro, contabiliza acertos exatos e guarda cores restantes da senha.
   for (let i = 0; i < guess.length; i++) {
     if (guess[i] === secret[i]) {
-      blacks++;
-      slots[i] = 'black';
+      greens++;
+      slots[i] = 'green';
     } else {
       const current = remainingSecretCounts.get(secret[i]) || 0;
       remainingSecretCounts.set(secret[i], current + 1);
@@ -288,7 +288,7 @@ export function evaluateGuess(guess, secret) {
 
   // Depois, avalia cada peça por posicao (1-2 / 3-4 / ...).
   for (let i = 0; i < guess.length; i++) {
-    if (slots[i] === 'black' || guess[i] == null) continue;
+    if (slots[i] === 'green' || guess[i] == null) continue;
 
     const count = remainingSecretCounts.get(guess[i]) || 0;
     if (count > 0) {
@@ -298,7 +298,7 @@ export function evaluateGuess(guess, secret) {
     }
   }
 
-  return { blacks, whites, slots };
+  return { greens, whites, slots };
 }
 
 function submitPlayerGuess() {
@@ -312,7 +312,7 @@ function submitPlayerGuess() {
 
   renderBoardRow(state.turn, state.currentGuess, feedback);
 
-  if (feedback.blacks === state.pegs) {
+  if (feedback.greens === state.pegs) {
     endMastermindGame(true);
   } else if (state.turn >= state.maxTurns) {
     endMastermindGame(false);
@@ -449,7 +449,7 @@ function runPCDecipherTurn() {
     renderBoardRow(state.turn, guess, feedback);
     audio.play('peg');
 
-    if (feedback.blacks === state.pegs) {
+    if (feedback.greens === state.pegs) {
       audio.play('error');
       showToast(`O PC decifrou seu código em ${state.turn} turnos!`, 'error');
       state.isPlaying = false;
@@ -462,7 +462,7 @@ function runPCDecipherTurn() {
       state.allPossibleCodes = state.allPossibleCodes.filter(c => {
         if (arraysEqual(c, guess)) return false;
         const f = evaluateGuess(guess, c);
-        return f.blacks === feedback.blacks && f.whites === feedback.whites;
+        return f.greens === feedback.greens && f.whites === feedback.whites;
       });
 
       state.turn++;

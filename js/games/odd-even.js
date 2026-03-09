@@ -52,15 +52,15 @@ function _renderTimerBar() {
   if (!fill) return;
   fill.style.width = `${pct * 100}%`;
 
-  fill.className = 'oe-timer-fill';
-  if (pct < 0.3) fill.classList.add('danger');
-  else if (pct < 0.6) fill.classList.add('warning');
+  fill.className = 'h-full bg-primary rounded-full shadow-[0_0_10px_rgba(236,91,19,0.3)] transition-all ease-linear duration-50';
+  if (pct < 0.3) fill.classList.replace('bg-primary', 'bg-red-500');
+  else if (pct < 0.6) fill.classList.replace('bg-primary', 'bg-amber-500');
 }
 
 function _onTimeout() {
   if (!state.active) return;
   const resultEl = document.getElementById('oeResult');
-  resultEl.innerHTML = `<div class="result-badge result-wrong">⏱️ Tempo esgotado!</div>`;
+  resultEl.innerHTML = `<span class="text-red-500 dark:text-red-400">⏱️ Tempo esgotado!</span>`;
   state.active = false;
   audio.play('error');
   addStat('oddEven', false, state.streak);
@@ -89,9 +89,12 @@ function _generateNumber() {
   const el = document.getElementById('oeNumber');
   if (el) {
     el.textContent = state.currentNumber;
-    el.classList.remove('pop');
+    el.classList.remove('scale-110', 'text-primary');
     void el.offsetWidth;
-    el.classList.add('pop');
+    el.classList.add('scale-110', 'text-primary');
+    setTimeout(() => {
+        el.classList.remove('scale-110', 'text-primary');
+    }, 150);
   }
 }
 
@@ -108,7 +111,7 @@ function _makeGuess(guess) {
     state.streak++;
     state.bestStreak = Math.max(state.bestStreak, state.streak);
 
-    resultEl.innerHTML = `<div class="result-badge result-correct">Correto! +${10 + (state.streak - 1) * 2} pts</div>`;
+    resultEl.innerHTML = `<span class="text-green-600 dark:text-green-400">Correto! +${10 + (state.streak - 1) * 2} pts</span>`;
     audio.play('success');
 
     _updateUI();
@@ -119,7 +122,7 @@ function _makeGuess(guess) {
       _startTimer();
     }, 900);
   } else {
-    resultEl.innerHTML = `<div class="result-badge result-wrong">Errado! ${state.currentNumber} e ${isOdd ? 'impar' : 'par'}</div>`;
+    resultEl.innerHTML = `<span class="text-red-600 dark:text-red-400">Errado! ${state.currentNumber} é ${isOdd ? 'ímpar' : 'par'}</span>`;
     state.active = false;
     audio.play('error');
     addStat('oddEven', false, state.streak);

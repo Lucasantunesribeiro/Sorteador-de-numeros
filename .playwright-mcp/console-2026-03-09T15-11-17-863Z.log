@@ -1,0 +1,39 @@
+[      19ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[     113ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     114ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     115ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     119ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateDashboard (http://localhost:8080/js/stats.js:62:57)
+    at http://localhost:8080/js/main.js?v=1.0.4:16:29
+    at showGame (http://localhost:8080/js/ui.js:27:37)
+    at _navigate (http://localhost:8080/js/main.js?v=1.0.4:15:3)
+    at HTMLDocument.<anonymous> (http://localhost:8080/js/main.js?v=1.0.4:92:3)
+[     134ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[     135ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.4:0
+[   60009ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[   60104ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateDashboard (http://localhost:8080/js/stats.js:62:57)
+    at http://localhost:8080/js/main.js?v=1.0.5:16:29
+    at showGame (http://localhost:8080/js/ui.js:27:37)
+    at _navigate (http://localhost:8080/js/main.js?v=1.0.5:15:3)
+    at HTMLDocument.<anonymous> (http://localhost:8080/js/main.js?v=1.0.5:92:3)
+[   60131ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[   60131ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.4:0
+[  191598ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[  191719ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[  191719ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.4:0
+[  192597ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateDashboard (http://localhost:8080/js/stats.js:62:57)
+    at http://localhost:8080/js/main.js?v=1.0.6:93:5
+[ 1270750ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[ 1270888ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[ 1270888ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.4:0
+[ 1271814ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateDashboard (http://localhost:8080/js/stats.js:62:57)
+    at http://localhost:8080/js/main.js?v=1.0.7:93:5
+[ 1321298ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[ 1321437ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[ 1321437ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.4:0
+[ 1321833ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateDashboard (http://localhost:8080/js/stats.js:62:57)
+    at http://localhost:8080/js/main.js?v=1.0.7:93:5

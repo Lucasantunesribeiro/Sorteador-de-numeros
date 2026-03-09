@@ -1,297 +1,1107 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#3b82f6">
+    <meta name="theme-color" content="#221610">
     <meta name="description" content="Uma suite completa de jogos de logica com design premium, estatisticas avancadas e experiencia gamificada">
     <title>Logic Games Suite</title>
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.1.0">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
 </head>
-<body>
-    <nav>
-        <div class="nav-container">
-            <div class="logo">
-                <div class="logo-icon">LG</div>
-                <span>Logic Games Suite</span>
-            </div>
-            <div class="nav-controls">
-                <button class="control-btn" id="soundToggle" title="Toggle Sound">🔊</button>
-                <button class="control-btn" id="themeToggle" title="Toggle Theme">☀️</button>
-                <button class="control-btn" id="fullscreenToggle" title="Fullscreen">⛶</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="main-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-title">Game Selection</div>
-                <div class="sidebar-subtitle">Choose your challenge</div>
-            </div>
-
-            <div class="game-menu">
-                <button class="game-btn active" data-game="dashboard">
-                    <span class="game-icon">📊</span><span>Dashboard</span>
-                </button>
-                <button class="game-btn" data-game="number-guess">
-                    <span class="game-icon">🎯</span><span>Number Guess</span>
-                </button>
-                <button class="game-btn" data-game="memory">
-                    <span class="game-icon">🧠</span><span>Memory Game</span>
-                </button>
-                <button class="game-btn" data-game="rng">
-                    <span class="game-icon">🎲</span><span>Random Generator</span>
-                </button>
-                <button class="game-btn" data-game="odd-even">
-                    <span class="game-icon">⚖️</span><span>Odd or Even</span>
-                </button>
-                <button class="game-btn" data-game="reaction">
-                    <span class="game-icon">⚡</span><span>Reaction Time</span>
-                </button>
-                <button class="game-btn" data-game="mastermind">
-                    <span class="game-icon">🔐</span><span>Mastermind</span>
-                </button>
-            </div>
-
-            <div class="stats-panel">
-                <div class="stats-title">Quick Stats</div>
-                <div class="stat-item">
-                    <span>Games Played</span>
-                    <span class="stat-value" id="totalGames">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Win Rate</span>
-                    <span class="stat-value" id="winRate">0%</span>
-                </div>
-                <div class="stat-item">
-                    <span>Best Streak</span>
-                    <span class="stat-value" id="bestStreak">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Achievements</span>
-                    <span class="stat-value" id="achievements">0</span>
-                </div>
-            </div>
-        </aside>
-
-        <main class="content">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        <!-- Main Application View Area -->
+        <main id="app-content">
 
             <!-- Dashboard -->
-            <section class="game-section active" id="dashboard">
-                <div class="game-header">
-                    <h1 class="game-title">Logic Games Suite</h1>
-                    <p class="game-description">Desafie sua mente com nossa colecao de jogos de logica interativos. Acompanhe seu progresso e melhore suas habilidades cognitivas.</p>
-                </div>
-                <div class="game-stats">
-                    <div class="stat-card"><div class="stat-number" id="dashTotalGames">0</div><div class="stat-label">Total de Jogos</div></div>
-                    <div class="stat-card"><div class="stat-number" id="dashWins">0</div><div class="stat-label">Vitorias</div></div>
-                    <div class="stat-card"><div class="stat-number" id="dashStreak">0</div><div class="stat-label">Streak Atual</div></div>
-                    <div class="stat-card"><div class="stat-number" id="dashTime">0</div><div class="stat-label">Tempo Jogado (min)</div></div>
-                </div>
-                <div class="game-card">
-                    <h3>Conquistas Recentes</h3>
-                    <div id="recentAchievements">
-                        <p class="empty-state">Jogue para desbloquear conquistas! 🎮</p>
+            <section class="game-section" id="dashboard">
+                <!-- Header -->
+                <header class="flex items-center justify-between gap-4 mb-12">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-primary p-2 rounded-lg text-white">
+                            <span class="material-symbols-outlined block">extension</span>
+                        </div>
+                        <h1 class="text-xl font-bold tracking-tight">Logic Games</h1>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="relative hidden md:block">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                            <input class="pl-10 pr-4 py-2 bg-slate-200/50 dark:bg-primary/10 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20 w-56" placeholder="Find a game..." type="text" aria-label="Find a game"/>
+                        </label>
+                        <button id="soundToggle" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 hover:bg-primary/20 transition-colors" title="Toggle Sound">
+                            <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">volume_up</span>
+                        </button>
+                        <button id="themeToggle" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 hover:bg-primary/20 transition-colors" title="Toggle Theme">
+                            <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">light_mode</span>
+                        </button>
+                        <button id="fullscreenToggle" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 hover:bg-primary/20 transition-colors hidden sm:flex" title="Fullscreen">
+                            <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">fullscreen</span>
+                        </button>
+                        <div class="w-10 h-10 flex flex-col items-center justify-center bg-primary/20 border-2 border-primary/10 rounded-full text-xs font-bold leading-none">
+                            <span id="dashStreak" class="text-primary truncate max-w-full">0</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Welcome Section -->
+                <section class="mb-10">
+                    <h2 class="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Welcome back.</h2>
+                    <p class="text-slate-500 dark:text-slate-400 font-medium">Ready to sharpen your mind today?</p>
+                </section>
+
+                <!-- Quick Filters -->
+                <nav class="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+                    <button class="px-5 py-2 bg-primary text-white rounded-full text-sm font-semibold shadow-lg shadow-primary/20 min-w-max">All Games</button>
+                    <button class="px-5 py-2 bg-slate-200/50 dark:bg-primary/10 text-slate-700 dark:text-slate-300 rounded-full text-sm font-semibold hover:bg-slate-300/50 dark:hover:bg-primary/20 transition-all min-w-max">Puzzles</button>
+                    <button class="px-5 py-2 bg-slate-200/50 dark:bg-primary/10 text-slate-700 dark:text-slate-300 rounded-full text-sm font-semibold hover:bg-slate-300/50 dark:hover:bg-primary/20 transition-all min-w-max">Memory</button>
+                    <button class="px-5 py-2 bg-slate-200/50 dark:bg-primary/10 text-slate-700 dark:text-slate-300 rounded-full text-sm font-semibold hover:bg-slate-300/50 dark:hover:bg-primary/20 transition-all min-w-max">Speed</button>
+                    <button class="px-5 py-2 bg-slate-200/50 dark:bg-primary/10 text-slate-700 dark:text-slate-300 rounded-full text-sm font-semibold hover:bg-slate-300/50 dark:hover:bg-primary/20 transition-all min-w-max">Strategy</button>
+                </nav>
+
+                <!-- Games Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 game-menu">
+                    <!-- Number Guess -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="number-guess">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-orange-400 to-primary opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Number Guess" src="stitch_screens/number_guess.png"/>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Number Guess</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Guess the secret number within reach.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Memory Game -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="memory">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-primary opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Memory Game" src="stitch_screens/memory_game.png"/>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Memory Game</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Match all pairs to win the challenge.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2048 -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="game-2048">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative flex items-center justify-center bg-[linear-gradient(135deg,#f59e0b_0%,#ec5b13_50%,#7c2d12_100%)]">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.26),transparent_45%)]"></div>
+                            <div class="relative grid grid-cols-2 gap-3">
+                                <div class="rounded-2xl bg-white/85 px-4 py-3 text-xl font-black text-amber-600 shadow-lg">2</div>
+                                <div class="rounded-2xl bg-white/20 px-4 py-3 text-xl font-black text-white/90 backdrop-blur-sm shadow-lg">0</div>
+                                <div class="rounded-2xl bg-white/20 px-4 py-3 text-xl font-black text-white/90 backdrop-blur-sm shadow-lg">4</div>
+                                <div class="rounded-2xl bg-white/85 px-4 py-3 text-xl font-black text-amber-600 shadow-lg">8</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">2048</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Merge tiles, protect space, and build the 2048 run.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sudoku -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="sudoku">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative flex items-center justify-center bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_45%,#334155_100%)]">
+                            <div class="absolute inset-0 bg-[linear-gradient(0deg,rgba(236,91,19,0.12),transparent)]"></div>
+                            <div class="relative grid grid-cols-3 gap-2 p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+                                <span class="rounded-lg bg-white/90 px-3 py-2 text-center text-sm font-black text-slate-900">8</span>
+                                <span class="rounded-lg bg-white/15 px-3 py-2 text-center text-sm font-black text-white">.</span>
+                                <span class="rounded-lg bg-white/90 px-3 py-2 text-center text-sm font-black text-slate-900">4</span>
+                                <span class="rounded-lg bg-white/15 px-3 py-2 text-center text-sm font-black text-white">.</span>
+                                <span class="rounded-lg bg-primary px-3 py-2 text-center text-sm font-black text-white">6</span>
+                                <span class="rounded-lg bg-white/15 px-3 py-2 text-center text-sm font-black text-white">.</span>
+                                <span class="rounded-lg bg-white/90 px-3 py-2 text-center text-sm font-black text-slate-900">2</span>
+                                <span class="rounded-lg bg-white/15 px-3 py-2 text-center text-sm font-black text-white">.</span>
+                                <span class="rounded-lg bg-white/90 px-3 py-2 text-center text-sm font-black text-slate-900">9</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Sudoku</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Procedural boards with one unique solution on every run.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lights Out -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="lights-out">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative flex items-center justify-center bg-[linear-gradient(135deg,#111827_0%,#0f172a_45%,#1d4ed8_100%)]">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),transparent_55%)]"></div>
+                            <div class="relative grid grid-cols-3 gap-2">
+                                <span class="size-8 rounded-lg bg-amber-300 shadow-[0_0_24px_rgba(253,224,71,0.7)]"></span>
+                                <span class="size-8 rounded-lg bg-slate-700"></span>
+                                <span class="size-8 rounded-lg bg-amber-300 shadow-[0_0_24px_rgba(253,224,71,0.7)]"></span>
+                                <span class="size-8 rounded-lg bg-slate-700"></span>
+                                <span class="size-8 rounded-lg bg-amber-300 shadow-[0_0_24px_rgba(253,224,71,0.7)]"></span>
+                                <span class="size-8 rounded-lg bg-slate-700"></span>
+                                <span class="size-8 rounded-lg bg-amber-300 shadow-[0_0_24px_rgba(253,224,71,0.7)]"></span>
+                                <span class="size-8 rounded-lg bg-slate-700"></span>
+                                <span class="size-8 rounded-lg bg-amber-300 shadow-[0_0_24px_rgba(253,224,71,0.7)]"></span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Lights Out</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Toggle the grid and shut every light with efficient moves.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Random Generator -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="rng">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-400 to-primary opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Random Generator" src="stitch_screens/random_generator.png"/>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Random Generator</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Generate random numbers securely.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Odd or Even -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="odd-even">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-red-400 to-primary opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Odd or Even" src="stitch_screens/odd_or_even.png"/>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Odd or Even</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Guess if the next number is odd or even in time.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Reaction Time -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="reaction">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-primary to-orange-600 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Reaction Time" src="stitch_screens/reaction_time.png"/>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Reaction Time</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Test your reflexes as fast as you can.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mastermind -->
+                    <div class="group game-btn bg-white dark:bg-primary/5 p-4 rounded-xl border border-slate-200 dark:border-primary/10 hover:border-primary/40 transition-all cursor-pointer" data-game="mastermind">
+                        <div class="aspect-video w-full rounded-lg mb-4 overflow-hidden relative flex items-center justify-center bg-slate-900 border-2 border-dashed border-slate-700">
+                            <div class="absolute inset-0 bg-gradient-to-br from-green-500 to-primary opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                            <span class="material-symbols-outlined text-6xl text-slate-500">lock</span>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-lg">Mastermind</h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-1">Break the secret color code.</p>
+                        <div class="flex items-center justify-between">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Play <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Progress Summary -->
+                <footer class="mt-16 pt-8 border-t border-slate-200 dark:border-primary/10">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="flex flex-wrap items-center gap-6 justify-center">
+                            <div class="text-center md:text-left">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Achievements</p>
+                                <div class="flex items-center justify-center md:justify-start gap-2">
+                                    <span class="text-2xl font-black text-primary" id="achievements">0</span>
+                                    <span class="material-symbols-outlined text-primary">emoji_events</span>
+                                </div>
+                            </div>
+                            <div class="w-px h-10 bg-slate-200 dark:bg-primary/20 hidden md:block"></div>
+                            <div class="text-center md:text-left">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Total Games</p>
+                                <div class="flex items-center justify-center md:justify-start gap-2">
+                                    <span class="text-2xl font-black" id="totalGames">0</span>
+                                </div>
+                            </div>
+                            <div class="w-px h-10 bg-slate-200 dark:bg-primary/20 hidden xl:block"></div>
+                            <div class="text-center md:text-left">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Win Rate</p>
+                                <div class="flex items-center justify-center md:justify-start gap-2">
+                                    <span class="text-xl font-bold" id="winRate">0%</span>
+                                </div>
+                            </div>
+                            <div class="w-px h-10 bg-slate-200 dark:bg-primary/20 hidden xl:block"></div>
+                            <div class="text-center md:text-left">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Best Streak</p>
+                                <div class="flex items-center justify-center md:justify-start gap-2">
+                                    <span class="text-xl font-bold text-orange-500" id="bestStreak">0</span>
+                                    <span class="material-symbols-outlined text-orange-500">local_fire_department</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-64">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Session Momentum</p>
+                                <span class="text-sm font-bold text-slate-600 dark:text-slate-300" id="dashboardProgressLabel">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-200/50 dark:bg-primary/10 h-2 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full w-0 transition-all duration-300" id="dashboardProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
             </section>
 
             <!-- Number Guessing Game -->
-            <section class="game-section" id="number-guess">
-                <div class="game-header">
-                    <h1 class="game-title">Number Guess</h1>
-                    <p class="game-description">Estou pensando em um numero entre 1 e 100. Voce consegue adivinhar? O calor da tela te guia!</p>
-                </div>
-                <div class="game-card">
-                    <div class="guess-container">
-                        <div class="game-stats">
-                            <div class="stat-card"><div class="stat-number" id="guessAttempts">0</div><div class="stat-label">Tentativas</div></div>
-                            <div class="stat-card"><div class="stat-number" id="guessRange">1-100</div><div class="stat-label">Intervalo</div></div>
-                            <div class="stat-card"><div class="stat-number" id="guessBest">-</div><div class="stat-label">Melhor</div></div>
+            <section class="game-section hidden" id="number-guess">
+                <div class="max-w-2xl mx-auto px-6 py-8 md:py-12 game-card transition-colors duration-300 rounded-xl" style="background-color: transparent;">
+                    <header class="flex items-center justify-between mb-12">
+                        <button class="back-btn flex items-center justify-center size-10 rounded-xl bg-slate-200/50 dark:bg-primary/10 hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-primary size-8 rounded flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-xl">numbers</span>
+                            </div>
+                            <h1 class="text-xl font-bold tracking-tight">Number Guess</h1>
                         </div>
-                        <div class="guess-input-group">
-                            <input type="number" class="input-field" id="guessInput" placeholder="Digite seu palpite..." min="1" max="100">
-                            <button class="btn" id="guessSubmit">Adivinhar</button>
+                        <div class="size-10"></div>
+                    </header>
+
+                    <main class="grid grid-cols-1 gap-8">
+                        <div class="bg-white/90 dark:bg-slate-900/60 p-6 rounded-xl border border-slate-200 dark:border-primary/10 shadow-sm">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Tentativas</span>
+                                <span class="text-sm font-bold text-primary" id="guessAttempts">0 / 10</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full transition-all duration-300" id="guessProgress" style="width: 0%"></div>
+                            </div>
                         </div>
-                        <div id="guessHint" class="hint" style="display:none;"></div>
-                        <div class="progress-bar"><div class="progress-fill" id="guessProgress" style="width:0%"></div></div>
-                        <button class="btn btn-secondary" id="guessNewGame">Novo Jogo</button>
-                    </div>
+
+                        <div class="text-center py-8" id="guessHintContainer" style="display:none;">
+                            <div class="inline-flex items-center justify-center mb-4 size-16 rounded-full bg-primary/10 dark:bg-primary/20 text-primary transition-colors duration-300" id="guessHintIconContainer">
+                                <span class="material-symbols-outlined text-4xl" id="guessHintIcon">help_outline</span>
+                            </div>
+                            <h2 class="text-3xl font-bold mb-2" id="guessHintTitle">Bem-vindo!</h2>
+                            <p class="text-slate-500 dark:text-slate-400" id="guessHintDesc">Tente adivinhar o número secreto.</p>
+                        </div>
+
+                        <div class="max-w-md mx-auto w-full space-y-6">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold text-slate-600 dark:text-slate-400 ml-1">Seu Palpite (1-100)</label>
+                                <input class="w-full bg-white/90 dark:bg-slate-900/60 border-2 border-slate-200 dark:border-primary/20 focus:border-primary focus:ring-0 rounded-xl px-6 py-5 text-4xl font-bold text-center tracking-widest placeholder:text-slate-300 dark:placeholder:text-slate-700 transition-all shadow-sm" placeholder="00" type="number" id="guessInput" min="1" max="100"/>
+                            </div>
+                            <button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-5 rounded-xl text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" id="guessSubmit">
+                                Adivinhar
+                            </button>
+                            <button class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-5 rounded-xl text-lg transition-all" id="guessNewGame">
+                                Novo Jogo
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 pt-8">
+                            <div class="p-4 rounded-xl border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 flex flex-col items-center shadow-sm">
+                                <span class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Last Guess</span>
+                                <span class="text-xl font-bold" id="guessLast">--</span>
+                            </div>
+                            <div class="p-4 rounded-xl border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 flex flex-col items-center shadow-sm">
+                                <span class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Current Range</span>
+                                <span class="text-xl font-bold" id="guessRange">1 - 100</span>
+                            </div>
+                        </div>
+                        <p class="text-center text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Best run <span class="text-primary tracking-normal ml-1" id="guessBest">-</span></p>
+                    </main>
+
+                    <footer class="mt-20 flex justify-center opacity-30">
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="size-2 rounded-full bg-slate-400"></div>
+                            <div class="size-2 rounded-full bg-slate-400"></div>
+                            <div class="size-2 rounded-full bg-slate-400"></div>
+                        </div>
+                    </footer>
                 </div>
             </section>
 
             <!-- Memory Game -->
-            <section class="game-section" id="memory">
-                <div class="game-header">
-                    <h1 class="game-title">Memory Challenge</h1>
-                    <p class="game-description">Encontre todos os pares para vencer! Teste sua memoria.</p>
-                </div>
-                <div class="game-card">
-                    <div class="game-stats">
-                        <div class="stat-card"><div class="stat-number" id="memoryMoves">0</div><div class="stat-label">Movimentos</div></div>
-                        <div class="stat-card"><div class="stat-number" id="memoryTime">00:00</div><div class="stat-label">Tempo</div></div>
-                        <div class="stat-card"><div class="stat-number" id="memoryPairs">0/8</div><div class="stat-label">Pares</div></div>
-                    </div>
-                    <div class="memory-grid" id="memoryGrid"></div>
-                    <div style="text-align:center; margin-top:1.5rem;">
-                        <button class="btn" id="memoryNewGame">Novo Jogo</button>
-                        <button class="btn btn-secondary" id="memoryHint">💡 Dica</button>
-                    </div>
+            <section class="game-section hidden" id="memory">
+                <div class="max-w-2xl mx-auto px-6 py-8 md:py-12 bg-transparent transition-colors duration-300 rounded-xl">
+                    <header class="flex items-center justify-between mb-12">
+                        <button class="back-btn flex items-center justify-center size-10 rounded-xl bg-slate-200/50 dark:bg-primary/10 hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-primary size-8 rounded flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-xl">grid_view</span>
+                            </div>
+                            <h1 class="text-xl font-bold tracking-tight">Memory Game</h1>
+                        </div>
+                        <div class="size-10"></div>
+                    </header>
+                    
+                    <main class="flex-1 flex flex-col items-center w-full">
+                        <!-- Stats Dashboard -->
+                        <div class="flex w-full gap-3 mb-6">
+                            <div class="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl p-3 sm:p-4 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 shadow-sm">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Moves</span>
+                                <p class="text-xl md:text-2xl font-bold text-primary" id="memoryMoves">0</p>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl p-3 sm:p-4 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 shadow-sm">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Tempo</span>
+                                <p class="text-xl md:text-2xl font-bold text-primary" id="memoryTime">00:00</p>
+                            </div>
+                        </div>
+                        <p class="mb-6 text-center text-xs font-bold uppercase tracking-[0.28em] text-slate-400">Pairs found <span class="tracking-normal text-primary ml-1" id="memoryPairs">0/6</span></p>
+
+                        <!-- Game Grid -->
+                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 md:gap-4 w-full max-w-2xl mx-auto" id="memoryGrid" style="perspective: 1000px;">
+                            <!-- Cards will be generated here by JS -->
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="flex flex-col w-full max-w-lg mx-auto gap-3 mt-8">
+                            <button class="flex items-center justify-center gap-2 rounded-xl h-14 bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-shadow shadow-lg shadow-primary/20" id="memoryHint">
+                                <span class="material-symbols-outlined">lightbulb</span>
+                                <span>Dica</span>
+                            </button>
+                            <button class="flex items-center justify-center gap-2 rounded-xl h-12 bg-white/90 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-colors" id="memoryNewGame">
+                                <span class="material-symbols-outlined text-slate-500">refresh</span>
+                                <span>Novo Jogo</span>
+                            </button>
+                        </div>
+                    </main>
                 </div>
             </section>
 
             <!-- Random Number Generator -->
-            <section class="game-section" id="rng">
-                <div class="game-header">
-                    <h1 class="game-title">Random Generator</h1>
-                    <p class="game-description">Gere numeros aleatorios dentro do intervalo que voce escolher</p>
+            <section class="game-section hidden" id="rng">
+                <div class="max-w-2xl mx-auto px-4 py-4 sm:px-6 sm:py-8 min-h-screen flex flex-col">
+                    <header class="flex items-center justify-between mb-8 sm:mb-12">
+                        <button class="back-btn flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                            <span class="text-sm font-medium">Dashboard</span>
+                        </button>
+                    </header>
+                    <main class="space-y-8 sm:space-y-12 flex-1">
+                        <section class="text-center space-y-4 flex flex-col items-center justify-center pt-4 sm:pt-0">
+                            <h1 class="text-sm font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">Resultado</h1>
+                            <div class="relative group">
+                                <div class="absolute -inset-4 bg-primary/10 rounded-full blur-2xl opacity-50 transition-opacity group-hover:opacity-100"></div>
+                                <div class="relative text-[88px] sm:text-8xl font-bold text-primary tabular-nums bounce tracking-tighter" id="rngResult">
+                                    ?
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label for="rngMin" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 ml-1">Mínimo</label>
+                                <input id="rngMin" class="w-full bg-white dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-800 rounded-xl px-5 py-4 focus:border-primary focus:ring-0 transition-all text-lg font-medium outline-none" type="number" value="1"/>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="rngMax" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 ml-1">Máximo</label>
+                                <input id="rngMax" class="w-full bg-white dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-800 rounded-xl px-5 py-4 focus:border-primary focus:ring-0 transition-all text-lg font-medium outline-none" type="number" value="100"/>
+                            </div>
+                        </section>
+
+                        <button id="rngGenerate" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-xl text-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-3">
+                            <span class="material-symbols-outlined">casino</span>
+                            Gerar Número
+                        </button>
+
+                        <section class="space-y-6 bg-white dark:bg-slate-900/50 rounded-[2rem] sm:rounded-2xl border border-slate-200 dark:border-slate-800 px-5 py-6 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+                                <h2 class="text-lg font-bold">Histórico Recente</h2>
+                                <button id="rngClear" class="text-sm font-medium text-primary hover:underline">Limpar</button>
+                            </div>
+                            
+                            <div id="rngHistory" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar sm:grid sm:grid-cols-5">
+                                <div class="col-span-full text-center text-slate-500 text-sm">Nenhum número gerado ainda</div>
+                            </div>
+                        </section>
+                    </main>
                 </div>
-                <div class="game-card">
-                    <div class="rng-container">
-                        <div class="rng-controls">
-                            <div>
-                                <label for="rngMin">Minimo:</label>
-                                <input type="number" class="input-field" id="rngMin" value="1">
+            </section>
+
+            <!-- 2048 Game -->
+            <section class="game-section hidden" id="game-2048">
+                <div class="max-w-6xl mx-auto px-6 py-8 md:py-12">
+                    <header class="flex items-center justify-between mb-10">
+                        <button class="back-btn flex items-center justify-center size-10 rounded-xl bg-slate-200/50 dark:bg-primary/10 hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <div class="flex size-10 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
+                                <span class="text-sm font-black tracking-tight">2048</span>
                             </div>
                             <div>
-                                <label for="rngMax">Maximo:</label>
-                                <input type="number" class="input-field" id="rngMax" value="100">
+                                <h1 class="text-xl font-bold tracking-tight">2048</h1>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Merge, route, and survive the grid.</p>
                             </div>
                         </div>
-                        <div class="rng-result bounce" id="rngResult">?</div>
-                        <button class="btn" id="rngGenerate">🎲 Gerar Numero</button>
-                        <div style="margin-top:2rem;">
-                            <h4>Historico</h4>
-                            <div id="rngHistory" class="rng-history-list">
-                                <p class="empty-state">Nenhum numero gerado ainda</p>
+                        <button id="g2048NewGame" class="inline-flex items-center gap-2 rounded-xl bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 px-4 py-2 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+                            <span class="material-symbols-outlined text-slate-500">refresh</span>
+                            New Game
+                        </button>
+                    </header>
+
+                    <main class="grid gap-8 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
+                        <section class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-5 shadow-sm">
+                            <div class="grid grid-cols-3 gap-3 mb-5">
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Score</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="g2048Score">0</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Best</p>
+                                    <p class="mt-2 text-2xl font-black text-primary" id="g2048BestScore">0</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Tile</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="g2048BestTile">0</p>
+                                </div>
+                            </div>
+
+                            <div class="g2048-grid" id="g2048Grid" aria-label="2048 board"></div>
+
+                            <div class="mt-5 grid grid-cols-3 gap-3 sm:max-w-[220px] sm:mx-auto">
+                                <div></div>
+                                <button id="g2048Up" class="g2048-control" aria-label="Move up">
+                                    <span class="material-symbols-outlined">keyboard_arrow_up</span>
+                                </button>
+                                <div></div>
+                                <button id="g2048Left" class="g2048-control" aria-label="Move left">
+                                    <span class="material-symbols-outlined">keyboard_arrow_left</span>
+                                </button>
+                                <button id="g2048Down" class="g2048-control" aria-label="Move down">
+                                    <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                                </button>
+                                <button id="g2048Right" class="g2048-control" aria-label="Move right">
+                                    <span class="material-symbols-outlined">keyboard_arrow_right</span>
+                                </button>
+                            </div>
+                        </section>
+
+                        <section class="flex flex-col gap-5">
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-6 shadow-sm">
+                                <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Status</p>
+                                <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-white" id="g2048Status">Build your lane.</h2>
+                                <p class="mt-3 text-slate-500 dark:text-slate-400">Arrow keys work on desktop. On mobile, use the controls below the board.</p>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Wins</p>
+                                    <p class="mt-2 text-3xl font-black text-slate-900 dark:text-white" id="g2048Wins">0</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Highest Tile</p>
+                                    <p class="mt-2 text-3xl font-black text-primary" id="g2048HighestOverall">0</p>
+                                </div>
+                            </div>
+
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900/60 dark:to-slate-950 p-6 shadow-sm">
+                                <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">How to play</p>
+                                <ul class="mt-4 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                                    <li>Combine identical tiles once per move to create larger values.</li>
+                                    <li>Keep corners stable and avoid opening the center too early.</li>
+                                    <li>The run is counted as a win if you hit 2048 before the board locks.</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            </section>
+
+            <!-- Sudoku Game -->
+            <section class="game-section hidden" id="sudoku">
+                <div class="max-w-6xl mx-auto px-6 py-8 md:py-12">
+                    <header class="flex flex-wrap items-center justify-between gap-4 mb-10">
+                        <button class="back-btn flex items-center justify-center size-10 rounded-xl bg-slate-200/50 dark:bg-primary/10 hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-primary size-10 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                                <span class="material-symbols-outlined">grid_on</span>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold tracking-tight">Sudoku</h1>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Procedural boards, one unique solution, zero duplicate guesses.</p>
                             </div>
                         </div>
-                    </div>
+                        <div class="flex items-center gap-3">
+                            <div class="rounded-full border border-emerald-200/80 bg-emerald-50 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.24em] text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
+                                <span id="sudokuUniqueStatus">Unique solution</span>
+                            </div>
+                            <button id="sudokuNewGame" class="inline-flex items-center gap-2 rounded-xl bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 px-4 py-2 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+                                <span class="material-symbols-outlined text-slate-500">refresh</span>
+                                New Puzzle
+                            </button>
+                        </div>
+                    </header>
+
+                    <main class="grid gap-8 xl:grid-cols-[minmax(0,1fr)_340px]">
+                        <section class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-5 shadow-sm">
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Timer</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="sudokuTimer">00:00</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Mistakes</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="sudokuMistakes">0</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Clues</p>
+                                    <p class="mt-2 text-2xl font-black text-primary" id="sudokuClues">0/81</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/80 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Progress</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="sudokuProgress">0%</p>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-3 md:grid-cols-3 mb-5">
+                                <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-slate-50/90 dark:bg-slate-950/50 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Selected</p>
+                                    <p class="mt-1 text-lg font-black text-slate-900 dark:text-white" id="sudokuSelectedValue">No cell</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-slate-50/90 dark:bg-slate-950/50 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Candidates</p>
+                                    <p class="mt-1 text-lg font-black text-primary" id="sudokuCandidates">-</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-slate-50/90 dark:bg-slate-950/50 px-4 py-3 text-right">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Input Mode</p>
+                                    <p class="mt-1 text-lg font-black text-primary" id="sudokuMode">Pen</p>
+                                </div>
+                            </div>
+
+                            <div class="sudoku-board-shell" id="sudokuBoardShell">
+                                <div class="sudoku-board-wrap">
+                                    <div class="sudoku-board" id="sudokuBoard" aria-label="Sudoku board"></div>
+                                </div>
+                                <div class="sudoku-loading hidden" id="sudokuLoading" aria-hidden="true">
+                                    <div class="sudoku-loading-dot"></div>
+                                    <div>
+                                        <p class="text-sm font-bold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">Preparing Board</p>
+                                        <p class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">Generating a fresh puzzle...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 mt-5">
+                                <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-slate-50/90 dark:bg-slate-950/50 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Open Cells</p>
+                                    <p class="mt-1 text-xl font-black text-slate-900 dark:text-white" id="sudokuRemaining">81</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-slate-50/90 dark:bg-slate-950/50 px-4 py-3">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Current Tier</p>
+                                    <p class="mt-1 text-xl font-black text-primary" id="sudokuCurrentDifficulty">Medium</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <aside class="flex flex-col gap-4">
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-6 shadow-sm">
+                                <label for="sudokuDifficulty" class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Difficulty</label>
+                                <select id="sudokuDifficulty" class="mt-3 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-3 font-semibold focus:border-primary focus:outline-none">
+                                    <option value="easy">Easy</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="hard">Hard</option>
+                                    <option value="expert">Expert</option>
+                                </select>
+                                <p class="mt-4 text-sm text-slate-500 dark:text-slate-400" id="sudokuStatus">Generating a fresh board with a unique solution.</p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Best Time</p>
+                                    <p class="mt-2 text-2xl font-black text-primary" id="sudokuBestTime">-</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Wins</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="sudokuWins">0</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Best Mistakes</p>
+                                    <p class="mt-2 text-2xl font-black text-slate-900 dark:text-white" id="sudokuBestMistakes">-</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Shortcuts</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-700 dark:text-slate-200">1-9, arrows, delete, N, A</p>
+                                </div>
+                            </div>
+
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-6 shadow-sm">
+                                <div class="flex items-center justify-between gap-3">
+                                    <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Toolkit</p>
+                                    <button id="sudokuNotesToggle" class="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-600 dark:text-slate-200 transition-colors">Notes</button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3 mt-4">
+                                    <button id="sudokuAutoNotes" class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-3 font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Auto Notes</button>
+                                    <button id="sudokuReset" class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-3 font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Reset Board</button>
+                                </div>
+                                <div class="grid grid-cols-3 gap-3 mt-4" id="sudokuPad"></div>
+                                <div class="grid grid-cols-2 gap-3 mt-4">
+                                    <button id="sudokuClear" class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-3 font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Erase</button>
+                                    <div class="rounded-xl border border-primary/10 bg-primary/5 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                        Instant validation on every move
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900/60 dark:to-slate-950 p-6 shadow-sm">
+                                <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">How This Works</p>
+                                <ul class="mt-4 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                                    <li>Each board is generated procedurally and checked for one unique solution.</li>
+                                    <li>Conflicts are detected immediately in the active row, column, and 3x3 box.</li>
+                                    <li>Use Notes mode for manual pencil marks, or press A for auto notes.</li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </main>
+                </div>
+            </section>
+
+            <!-- Lights Out Game -->
+            <section class="game-section hidden" id="lights-out">
+                <div class="max-w-5xl mx-auto px-6 py-8 md:py-12">
+                    <header class="flex items-center justify-between mb-10">
+                        <button class="back-btn flex items-center justify-center size-10 rounded-xl bg-slate-200/50 dark:bg-primary/10 hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-primary size-10 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                                <span class="material-symbols-outlined">lightbulb</span>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold tracking-tight">Lights Out</h1>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Tap cells and shut the whole board down.</p>
+                            </div>
+                        </div>
+                        <button id="lightsOutNewGame" class="inline-flex items-center gap-2 rounded-xl bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 px-4 py-2 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+                            <span class="material-symbols-outlined text-slate-500">autorenew</span>
+                            New Puzzle
+                        </button>
+                    </header>
+
+                    <main class="grid gap-8 lg:grid-cols-[minmax(0,460px)_minmax(0,1fr)]">
+                        <section class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-5 shadow-sm">
+                            <div class="lights-grid" id="lightsOutGrid" aria-label="Lights Out board"></div>
+                        </section>
+
+                        <aside class="flex flex-col gap-4">
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Moves</p>
+                                    <p class="mt-2 text-3xl font-black text-slate-900 dark:text-white" id="lightsOutMoves">0</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Timer</p>
+                                    <p class="mt-2 text-3xl font-black text-primary" id="lightsOutTime">00:00</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Best Moves</p>
+                                    <p class="mt-2 text-3xl font-black text-slate-900 dark:text-white" id="lightsOutBestMoves">-</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-primary/10 bg-slate-50 dark:bg-slate-900/40 p-5">
+                                    <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Best Time</p>
+                                    <p class="mt-2 text-3xl font-black text-primary" id="lightsOutBestTime">-</p>
+                                </div>
+                            </div>
+
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-slate-900/60 p-6 shadow-sm">
+                                <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Status</p>
+                                <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-white" id="lightsOutStatus">Every click changes the cross.</h2>
+                                <p class="mt-3 text-slate-500 dark:text-slate-400">A cell toggles itself and the four orthogonal neighbors. Turn every light off to finish the puzzle.</p>
+                                <div class="grid grid-cols-2 gap-3 mt-5">
+                                    <button id="lightsOutReset" class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-3 font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Reset Board</button>
+                                    <div class="rounded-xl border border-dashed border-slate-200 dark:border-slate-700 px-4 py-3">
+                                        <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Wins</p>
+                                        <p class="mt-2 text-2xl font-black text-primary" id="lightsOutWins">0</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-[2rem] border border-slate-200 dark:border-primary/10 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900/60 dark:to-slate-950 p-6 shadow-sm">
+                                <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Hint</p>
+                                <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">Work from the top row downward. Each move is reversible, so the shuffle is always solvable.</p>
+                            </div>
+                        </aside>
+                    </main>
                 </div>
             </section>
 
             <!-- Odd or Even Game -->
-            <section class="game-section" id="odd-even">
-                <div class="game-header">
-                    <h1 class="game-title">Odd or Even</h1>
-                    <p class="game-description">Adivinhe se o proximo numero sera par ou impar! O tempo diminui com seu streak!</p>
-                </div>
-                <div class="game-card">
-                    <div class="guess-container">
-                        <div class="game-stats">
-                            <div class="stat-card"><div class="stat-number" id="oeScore">0</div><div class="stat-label">Pontos</div></div>
-                            <div class="stat-card"><div class="stat-number" id="oeStreak">0</div><div class="stat-label">Streak</div></div>
-                            <div class="stat-card"><div class="stat-number" id="oeBest">0</div><div class="stat-label">Melhor Streak</div></div>
+            <section class="game-section hidden" id="odd-even">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col min-h-screen">
+                    <!-- Navigation Header -->
+                    <header class="flex items-center justify-between py-6 border-b border-slate-200 dark:border-slate-800">
+                        <button class="back-btn flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                            <span class="text-sm font-medium">Dashboard</span>
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <button id="oeNewGame" class="flex items-center gap-2 text-sm font-medium text-primary hover:underline">
+                                <span class="material-symbols-outlined text-xl">refresh</span> Novo Jogo
+                            </button>
                         </div>
-                        <div class="oe-timer-bar"><div class="oe-timer-fill" id="oeTimerFill"></div></div>
-                        <div class="oe-number-display">
-                            <div class="oe-number" id="oeNumber">?</div>
-                            <p class="oe-question">Par ou Impar?</p>
+                    </header>
+                    <main class="flex-1 flex flex-col justify-center py-12 gap-12">
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-1 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                                <span class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Pontos</span>
+                                <span class="text-2xl font-black text-primary" id="oeScore">0</span>
+                            </div>
+                            <div class="flex flex-col gap-1 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                                <span class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Streak</span>
+                                <span class="text-2xl font-black text-slate-900 dark:text-slate-100" id="oeStreak">0</span>
+                            </div>
+                            <div class="flex flex-col gap-1 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                                <span class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Melhor</span>
+                                <span class="text-2xl font-black text-slate-900 dark:text-slate-100" id="oeBest">0</span>
+                            </div>
                         </div>
-                        <div class="oe-buttons">
-                            <button class="btn btn-odd" id="guessOdd">Impar</button>
-                            <button class="btn btn-even" id="guessEven">Par</button>
+                        
+                        <!-- Main Game Display -->
+                        <div class="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl relative overflow-hidden">
+                            <!-- Abstract Background Pattern -->
+                            <div class="absolute inset-0 opacity-5 pointer-events-none">
+                                <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary via-transparent to-transparent"></div>
+                            </div>
+                            <span class="text-sm font-medium text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Esse número é...</span>
+                            <div id="oeNumber" class="text-[120px] font-black leading-none tracking-tighter text-slate-900 dark:text-slate-100 pop">?</div>
                         </div>
-                        <div id="oeResult" class="oe-result"></div>
-                        <button class="btn btn-secondary" id="oeNewGame">Novo Jogo</button>
-                    </div>
+
+                        <!-- Result display -->
+                        <div id="oeResult" class="text-center h-8 flex items-center justify-center font-bold text-lg"></div>
+
+                        <!-- Interaction Controls -->
+                        <div class="flex flex-col gap-6">
+                            <div class="grid grid-cols-2 gap-6">
+                                <button id="guessOdd" class="group relative flex flex-col items-center justify-center h-40 rounded-[2rem] bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                    <span class="text-3xl font-black uppercase tracking-tight">Ímpar</span>
+                                    <span class="material-symbols-outlined text-white/50 absolute top-4 right-4 group-hover:text-white transition-colors">bolt</span>
+                                </button>
+                                <button id="guessEven" class="group relative flex flex-col items-center justify-center h-40 rounded-[2rem] bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                    <span class="text-3xl font-black uppercase tracking-tight">Par</span>
+                                    <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 absolute top-4 right-4 group-hover:text-slate-100 dark:group-hover:text-slate-900 transition-colors">auto_awesome</span>
+                                </button>
+                            </div>
+                        </div>
+                    </main>
+                    
+                    <!-- Footer Progress -->
+                    <footer class="py-8">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Tempo</span>
+                        </div>
+                        <div class="w-full h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div id="oeTimerFill" class="h-full bg-primary w-[100%] rounded-full shadow-[0_0_10px_rgba(236,91,19,0.3)] transition-all ease-linear duration-50"></div>
+                        </div>
+                    </footer>
                 </div>
             </section>
 
             <!-- Reaction Time Game -->
-            <section class="game-section" id="reaction">
-                <div class="game-header">
-                    <h1 class="game-title">Reaction Time</h1>
-                    <p class="game-description">Teste seus reflexos! Clique assim que a tela ficar verde.</p>
-                </div>
-                <div class="game-card">
-                    <div class="guess-container">
-                        <div class="game-stats">
-                            <div class="stat-card"><div class="stat-number" id="reactionTime">0ms</div><div class="stat-label">Ultimo</div></div>
-                            <div class="stat-card"><div class="stat-number" id="reactionAverage">0ms</div><div class="stat-label">Media</div></div>
-                            <div class="stat-card"><div class="stat-number" id="reactionBest">-</div><div class="stat-label">Melhor</div></div>
+            <section class="game-section hidden" id="reaction">
+                <div class="max-w-7xl mx-auto px-6 py-8 md:px-20 flex flex-col min-h-screen">
+                    <!-- Navigation Header -->
+                    <header class="flex items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-slate-800">
+                        <button class="back-btn flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-bold transition-transform active:scale-95 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
+                            <span class="material-symbols-outlined">arrow_back</span> Dashboard
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-primary/10 dark:bg-primary/20 text-primary rounded-lg">
+                                <span class="material-symbols-outlined block">timer</span>
+                            </div>
+                            <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Reaction Lab</h1>
                         </div>
-                        <div id="reactionArea" class="reaction-area" data-state="idle">
-                            <div id="reactionText">
-                                <h3>Clique para Iniciar</h3>
-                                <p>Aguarde o verde, depois clique!</p>
+                    </header>
+
+                    <main class="flex-1 flex flex-col gap-8">
+                        <div class="text-center">
+                            <h2 class="text-3xl font-bold tracking-tight mb-2">Teste seus reflexos</h2>
+                            <p class="text-slate-500 dark:text-slate-400">Clique na área assim que ficar verde.</p>
+                        </div>
+
+                        <!-- Main Interactive Zone -->
+                        <div id="reactionArea" data-state="idle" class="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-xl overflow-hidden cursor-pointer group shadow-sm transition-colors duration-200 border border-slate-200 dark:border-slate-800 bg-primary/5 dark:bg-primary/10 flex flex-col items-center justify-center">
+                            <div id="reactionInner" class="absolute inset-0 flex items-center justify-center pointer-events-none transition-colors duration-200">
+                                <div id="reactionText" class="text-center">
+                                    <span class="material-symbols-outlined text-primary text-6xl mb-4 opacity-50">touch_app</span>
+                                    <p class="text-4xl md:text-5xl font-black tracking-tighter text-primary">INICIAR</p>
+                                    <p class="mt-4 text-lg font-medium text-slate-600 dark:text-slate-300">Clique na caixa para começar</p>
+                                </div>
+                            </div>
+                            <!-- Reset Action Overlay -->
+                            <div class="absolute bottom-6 right-6">
+                                <button id="reactionReset" class="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 px-6 py-2 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-2" onclick="event.stopPropagation()">
+                                    <span class="material-symbols-outlined text-sm">refresh</span> ZERAR
+                                </button>
                             </div>
                         </div>
-                        <div style="display:flex;gap:1rem;justify-content:center;">
-                            <button class="btn" id="reactionStart">Iniciar Teste</button>
-                            <button class="btn btn-secondary" id="reactionReset">Resetar Stats</button>
+
+                        <!-- Statistics Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                            <div class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center shadow-sm">
+                                <p class="text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest text-xs mb-2">Último</p>
+                                <p id="reactionTime" class="text-3xl font-bold text-slate-900 dark:text-slate-100">0<span class="text-base font-normal text-slate-400">ms</span></p>
+                            </div>
+                            <div class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center shadow-sm">
+                                <p class="text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest text-xs mb-2">Média</p>
+                                <p id="reactionAverage" class="text-3xl font-bold text-slate-900 dark:text-slate-100">0<span class="text-base font-normal text-slate-400">ms</span></p>
+                            </div>
+                            <div class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center shadow-sm">
+                                <p class="text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest text-xs mb-2">Melhor Pessoal</p>
+                                <p id="reactionBest" class="text-3xl font-bold text-primary">-</p>
+                                <div class="mt-3 h-1 w-12 bg-primary rounded-full"></div>
+                            </div>
                         </div>
-                    </div>
+                    </main>
                 </div>
             </section>
 
             <!-- Mastermind Game -->
-            <section class="game-section" id="mastermind">
-                <div class="game-header">
-                    <h1 class="game-title">Mastermind</h1>
-                    <p class="game-description">Decifre o codigo secreto de cores (sem repeticao). Preto = cor e posicao corretas. Branco = cor correta, posicao errada.</p>
-                </div>
-                <div class="game-card mastermind-wrap">
+            <section class="game-section hidden" id="mastermind">
+                <style>
+                    /* Inline mastermind specifics to match tailwind style */
+                    .mm-row {
+                        display: flex;
+                        align-items: center;
+                        gap: 1.5rem;
+                        padding: 0.75rem 1rem;
+                        background: transparent;
+                        border-radius: 10px;
+                        border: 1px solid transparent;
+                        transition: all 0.2s;
+                    }
                     
-                    <div class="mm-settings">
-                        <div class="mm-setting-group">
-                            <label for="mmMode">Modo:</label>
-                            <select id="mmMode" class="input-field mm-select">
-                                <option value="player_guess">Jogador Decifra</option>
-                                <option value="pc_guess">PC Decifra</option>
-                            </select>
-                        </div>
-                        <div class="mm-setting-group">
-                            <label for="mmPegs">Pinos (4-8):</label>
-                            <input type="number" id="mmPegs" class="input-field mm-input-number" min="4" max="8" value="4">
-                        </div>
-                        <div class="mm-setting-group">
-                            <label for="mmColors">Cores (4-8):</label>
-                            <input type="number" id="mmColors" class="input-field mm-input-number" min="4" max="8" value="6">
-                        </div>
-                        <button class="btn btn-secondary" id="mmApplySettings">Aplicar</button>
-                    </div>
-
-                    <div class="game-stats">
-                        <div class="stat-card"><div class="stat-number" id="mmTurn">1</div><div class="stat-label">Turno / Max: <span id="mmMaxTurns">10</span></div></div>
-                        <div class="stat-card"><div class="stat-number" id="mmBest">-</div><div class="stat-label">Melhor (Menos Tentativas)</div></div>
-                        <div class="stat-card"><div class="stat-number" id="mmWins">0</div><div class="stat-label">Vitorias</div></div>
-                    </div>
-
-                    <div class="mm-legend">
-                        <span class="mm-legend-item"><span class="mm-fb-peg black"></span> Cor + Posicao corretas</span>
-                        <span class="mm-legend-item"><span class="mm-fb-peg white"></span> Cor correta</span>
-                        <span class="mm-legend-item">Ordem por peca: 1-2 / 3-4 (1=1a peca, 2=2a...)</span>
-                    </div>
-
-                    <div class="mm-board" id="mmBoard"></div>
-
-                    <div id="mmSecretReveal" class="mm-secret-reveal" style="display:none;">
-                        <h3>Senha:</h3>
-                        <div class="mm-row" id="mmSecretRow"></div>
-                    </div>
+                    .mm-peg {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 9999px;
+                        background: var(--peg-color, transparent);
+                        position: relative;
+                        transition: all 0.2s ease-out;
+                    }
                     
-                    <!-- Area setup the password for PC Guess mode -->
-                    <div id="mmSetupSecret" class="mm-setup-secret" style="display: none;">
-                        <h3>Escolha a Senha para o PC Decifrar</h3>
-                        <div class="mm-current-row" id="mmSetupRow"></div>
-                        <button class="btn" id="mmConfirmSetup" disabled>Iniciar Jogo do PC</button>
-                    </div>
-
-                    <div class="mm-controls" id="mmControlsArea">
-                        <div class="mm-palette" id="mmPalette"></div>
-                        <div class="mm-current-row" id="mmCurrentRow">
-                            <!-- Slots gerados dinamicamente via JS -->
+                    .mm-peg.mm-peg-empty {
+                        background: theme('colors.slate.100');
+                    }
+                    .dark .mm-peg.mm-peg-empty {
+                        background: theme('colors.slate.800');
+                    }
+                    
+                    .mm-peg.interactive {
+                        cursor: pointer;
+                        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+                    }
+                    .mm-peg.interactive:hover {
+                        transform: scale(1.1) translateY(-2px);
+                    }
+                    
+                    .mm-peg.filled {
+                        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+                        animation: pegPop 0.2s ease-out;
+                    }
+                    
+                    .mm-feedback-grid {
+                        display: grid;
+                        grid-template-columns: repeat(var(--mm-feedback-columns, 2), 16px);
+                        grid-auto-rows: 16px;
+                        gap: 6px;
+                        width: auto;
+                        margin-left: auto;
+                    }
+                    
+                    .mm-fb-peg {
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 9999px;
+                    }
+                    
+                    .mm-fb-peg.green {
+                        background-color: theme('colors.green.500');
+                    }
+                    .mm-fb-peg.white {
+                        background-color: white;
+                        border: 2px solid theme('colors.slate.200');
+                    }
+                    .dark .mm-fb-peg.white {
+                        border-color: theme('colors.slate.600');
+                    }
+                    .mm-fb-peg.empty {
+                        background-color: transparent;
+                        border: 2px solid theme('colors.slate.200');
+                    }
+                    .dark .mm-fb-peg.empty {
+                        border-color: theme('colors.slate.700');
+                    }
+                </style>
+                <div class="max-w-3xl mx-auto px-6 py-8 md:py-12 bg-transparent transition-colors duration-300 rounded-xl">
+                    <header class="flex items-center justify-between mb-12">
+                        <button class="back-btn flex items-center justify-center size-10 rounded-xl bg-slate-200/50 dark:bg-primary/10 hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-primary size-8 rounded flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-xl">lock</span>
+                            </div>
+                            <h1 class="text-xl font-bold tracking-tight">Mastermind</h1>
                         </div>
-                        <button class="btn" id="mmSubmit" disabled>🔐 Confirmar</button>
-                    </div>
+                        <div class="size-10"></div>
+                    </header>
+                    
+                    <main class="flex flex-col gap-6">
+                        
+                        <!-- Top Information Area -->
+                        <div class="flex gap-3 mb-4">
+                             <div class="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl p-3 sm:p-4 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 shadow-sm">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Turno</span>
+                                <p class="text-xl md:text-2xl font-bold text-primary flex items-baseline gap-1"><span id="mmTurn">1</span> <span class="text-xs text-slate-400 font-normal">/ <span id="mmMaxTurns">10</span></span></p>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl p-3 sm:p-4 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 shadow-sm">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Melhor</span>
+                                <p class="text-xl md:text-2xl font-bold text-primary" id="mmBest">-</p>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl p-3 sm:p-4 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 shadow-sm">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Vitórias</span>
+                                <p class="text-xl md:text-2xl font-bold text-primary" id="mmWins">0</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Settings / Mode -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex flex-col">
+                                <label for="mmMode" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 ml-1 mb-1">Modo</label>
+                                <select id="mmMode" class="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-medium text-sm">
+                                    <option value="player_guess">Jogador Decifra</option>
+                                    <option value="pc_guess">PC Decifra</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="mmPegs" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 ml-1 mb-1">Pinos (4-8)</label>
+                                <input type="number" id="mmPegs" class="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-medium text-sm" min="4" max="8" value="4">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="mmColors" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 ml-1 mb-1">Cores (4-8)</label>
+                                <input type="number" id="mmColors" class="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-medium text-sm" min="4" max="8" value="6">
+                            </div>
+                            <div class="md:col-span-3">
+                                <button class="w-full flex items-center justify-center gap-2 rounded-xl h-12 bg-white/90 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-colors" id="mmApplySettings">
+                                    <span class="material-symbols-outlined text-slate-500 text-lg">check_circle</span>
+                                    Aplicar Configurações
+                                </button>
+                            </div>
+                        </div>
 
-                    <button class="btn btn-secondary" id="mmNewGame" style="margin-top:1rem;">↺ Novo Jogo</button>
+                        <div class="flex justify-center flex-wrap gap-4 text-xs font-medium text-slate-500 dark:text-slate-400 px-4 mt-2">
+                            <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span> Exato</span>
+                            <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-white inline-block border border-slate-300 dark:border-slate-600"></span> Cor</span>
+                            <span class="flex items-center gap-2"><span class="material-symbols-outlined text-[14px]">info</span> Ordem da dica não indica a posição do pino</span>
+                        </div>
+
+                        <!-- Main Board -->
+                        <div class="mm-board mx-auto w-full bg-white dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-primary/10 flex flex-col gap-3" id="mmBoard" style="min-height: 200px; max-height: 50vh; overflow-y: auto;"></div>
+
+                        <!-- Reveal -->
+                        <div id="mmSecretReveal" class="bg-primary/5 dark:bg-primary/10 border-2 border-primary/20 p-6 rounded-2xl flex flex-col items-center justify-center gap-4 animate-[fadeInUp_0.4s_ease]" style="display:none;">
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-primary">Senha Certa:</h3>
+                            <div class="flex gap-3" id="mmSecretRow"></div>
+                        </div>
+                        
+                        <!-- Setup for PC -->
+                        <div id="mmSetupSecret" class="bg-slate-50 dark:bg-slate-800/80 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col items-center gap-6" style="display: none;">
+                            <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">Escolha a Senha para o PC Decifrar</h3>
+                            <div class="flex justify-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 min-h-[80px]" id="mmSetupRow"></div>
+                            <button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all" id="mmConfirmSetup" disabled>Iniciar Jogo do PC</button>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="bg-white/90 dark:bg-slate-900/60 p-6 rounded-2xl border border-slate-200 dark:border-primary/10 shadow-sm flex flex-col gap-8" id="mmControlsArea">
+                            <div class="flex justify-center flex-wrap gap-4" id="mmPalette"></div>
+                            
+                            <div class="flex flex-col gap-4">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center">Seu Palpite</label>
+                                <div class="flex justify-center gap-3 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl min-h-[80px]" id="mmCurrentRow">
+                                    <!-- Slots dynamically generated -->
+                                </div>
+                            </div>
+
+                            <button class="w-full flex items-center justify-center gap-2 rounded-xl h-14 bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-shadow shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed" id="mmSubmit" disabled>
+                                Confirmar Palpite
+                            </button>
+                        </div>
+
+                        <button class="w-full flex items-center justify-center gap-2 rounded-xl h-12 bg-white/90 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-colors mt-4" id="mmNewGame">
+                            <span class="material-symbols-outlined text-slate-500">refresh</span>
+                            Novo Jogo
+                        </button>
+                    </main>
                 </div>
             </section>
 
@@ -300,6 +1110,6 @@
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js?v=1.1.0"></script>
 </body>
 </html>

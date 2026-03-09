@@ -1,0 +1,12 @@
+[      20ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[     107ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     107ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     108ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     127ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[     128ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.7:0
+[     808ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateDashboard (http://localhost:8080/js/stats.js:62:57)
+    at http://localhost:8080/js/main.js?v=1.0.7:93:5
+[   63984ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[   64107ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[   64107ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/?v=1.0.7:0

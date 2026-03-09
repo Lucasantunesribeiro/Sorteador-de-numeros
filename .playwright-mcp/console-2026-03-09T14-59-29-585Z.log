@@ -1,0 +1,28 @@
+[      22ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[     114ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     114ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     115ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[     117ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateSidebarStats (http://localhost:8080/js/stats.js:57:54)
+    at HTMLDocument.<anonymous> (http://localhost:8080/js/main.js:82:3)
+[     134ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[     134ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/index.html?v=2:0
+[    5120ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateSidebarStats (http://localhost:8080/js/stats.js:57:54)
+    at addStat (http://localhost:8080/js/stats.js:48:3)
+    at _onTimeout (http://localhost:8080/js/games/odd-even.js:66:3)
+    at http://localhost:8080/js/games/odd-even.js:37:7
+[   12697ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/?plugins=forms,container-queries:63
+[   12789ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[   12790ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[   12791ms] [WARNING] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio @ http://localhost:8080/js/audio.js:40
+[   12792ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateSidebarStats (http://localhost:8080/js/stats.js:57:54)
+    at HTMLDocument.<anonymous> (http://localhost:8080/js/main.js:82:3)
+[   12809ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/img/icon-192.png:0
+[   12809ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:8080/img/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:8080/index.html?v=2:0
+[   17802ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateSidebarStats (http://localhost:8080/js/stats.js:57:54)
+    at addStat (http://localhost:8080/js/stats.js:48:3)
+    at _onTimeout (http://localhost:8080/js/games/odd-even.js:66:3)
+    at http://localhost:8080/js/games/odd-even.js:37:7

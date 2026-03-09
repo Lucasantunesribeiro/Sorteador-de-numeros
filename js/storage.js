@@ -13,6 +13,9 @@ const DEFAULT_STATS = {
   games: {
     numberGuess: { played: 0, won: 0, bestAttempts: null },
     memory:      { played: 0, won: 0, bestTime: null, bestMoves: null },
+    game2048:    { played: 0, won: 0, bestTile: 0, bestScore: 0 },
+    sudoku:      { played: 0, won: 0, bestTime: null, bestMistakes: null },
+    lightsOut:   { played: 0, won: 0, bestMoves: null, bestTime: null },
     oddEven:     { played: 0, bestStreak: 0 },
     reaction:    { played: 0, bestTime: null },
     mastermind:  { played: 0, won: 0, bestTurns: null }

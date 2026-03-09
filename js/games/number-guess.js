@@ -3,129 +3,204 @@ import { showToast } from '../ui.js';
 import { addStat, stats, checkAchievements } from '../stats.js';
 
 const state = {
-  target: 0, attempts: 0, maxAttempts: 10,
-  min: 1, max: 100, active: false
+  target: 0,
+  attempts: 0,
+  maxAttempts: 10,
+  min: 1,
+  max: 100,
+  lowerBound: 1,
+  upperBound: 100,
+  lastGuess: null,
+  active: false
 };
 
-function _getCard() {
+function getCard() {
   return document.querySelector('#number-guess .game-card');
 }
 
-function _applyTemperature(guess) {
-  const range    = state.max - state.min;
-  const distance = Math.abs(guess - state.target);
-  const proximity = 1 - (distance / range); // 0=far, 1=exact
+function setHint(title, description, icon, toneClasses) {
+  const container = document.getElementById('guessHintContainer');
+  const iconWrap = document.getElementById('guessHintIconContainer');
+  const iconEl = document.getElementById('guessHintIcon');
 
-  const card = _getCard();
-  if (!card) return;
-
-  let hue, saturation = 80;
-  if (proximity < 0.4) {
-    hue = 210; // icy blue
-  } else if (proximity < 0.6) {
-    hue = 180; // cyan
-  } else if (proximity < 0.75) {
-    hue = 40;  // warm yellow
-  } else if (proximity < 0.9) {
-    hue = 20;  // orange
-  } else {
-    hue = 4;   // fiery red
-    saturation = 90;
-  }
-
-  const intensity = Math.max(0, (proximity - 0.35) / 0.65);
-  card.style.setProperty('--temp-hue', hue);
-  card.style.setProperty('--temp-sat', `${saturation}%`);
-  card.style.setProperty('--temp-alpha', intensity.toFixed(2));
+  container.style.display = 'block';
+  document.getElementById('guessHintTitle').textContent = title;
+  document.getElementById('guessHintDesc').textContent = description;
+  iconEl.textContent = icon;
+  iconWrap.className = `inline-flex items-center justify-center mb-4 size-16 rounded-full transition-colors duration-300 ${toneClasses}`;
 }
 
-function _resetTemperature() {
-  const card = _getCard();
-  if (card) {
-    card.style.setProperty('--temp-alpha', '0');
+function updateRangeLabel() {
+  document.getElementById('guessRange').textContent = `${state.lowerBound} - ${state.upperBound}`;
+}
+
+function updateLastGuessLabel() {
+  const lastGuess = document.getElementById('guessLast');
+  if (lastGuess) {
+    lastGuess.textContent = state.lastGuess == null ? '--' : String(state.lastGuess);
   }
+}
+
+function applyTemperature(guess) {
+  const range = state.max - state.min;
+  const distance = Math.abs(guess - state.target);
+  const proximity = 1 - distance / range;
+  const card = getCard();
+
+  if (!card) return;
+
+  let hue = 210;
+  let saturation = 78;
+  if (proximity >= 0.9) {
+    hue = 4;
+    saturation = 92;
+  } else if (proximity >= 0.75) {
+    hue = 20;
+  } else if (proximity >= 0.55) {
+    hue = 40;
+  } else if (proximity >= 0.4) {
+    hue = 180;
+  }
+
+  const intensity = Math.max(0, (proximity - 0.32) / 0.68);
+  card.style.backgroundColor = `hsla(${hue}, ${saturation}%, 50%, ${intensity.toFixed(2)})`;
+}
+
+function resetTemperature() {
+  const card = getCard();
+  if (card) {
+    card.style.backgroundColor = 'transparent';
+  }
+}
+
+function updateBest() {
+  const best = stats.games.numberGuess.bestAttempts;
+  document.getElementById('guessBest').textContent = best || '-';
 }
 
 function newGame() {
-  state.target   = Math.floor(Math.random() * (state.max - state.min + 1)) + state.min;
+  state.target = Math.floor(Math.random() * (state.max - state.min + 1)) + state.min;
   state.attempts = 0;
-  state.active   = true;
+  state.lowerBound = state.min;
+  state.upperBound = state.max;
+  state.lastGuess = null;
+  state.active = true;
 
-  _resetTemperature();
-  document.getElementById('guessInput').value         = '';
-  document.getElementById('guessHint').style.display  = 'none';
-  document.getElementById('guessAttempts').textContent = '0';
+  resetTemperature();
+  document.getElementById('guessInput').value = '';
+  document.getElementById('guessAttempts').textContent = `0 / ${state.maxAttempts}`;
   document.getElementById('guessProgress').style.width = '0%';
-  document.getElementById('guessRange').textContent   = `${state.min}-${state.max}`;
+
+  updateRangeLabel();
+  updateLastGuessLabel();
+  updateBest();
+  setHint(
+    'Adivinhe o numero',
+    `Estou pensando em um numero entre ${state.min} e ${state.max}.`,
+    'numbers',
+    'bg-primary/10 dark:bg-primary/20 text-primary'
+  );
 
   audio.play('click');
 }
 
-function _submitGuess() {
+function submitGuess() {
   if (!state.active) return;
 
   const guess = parseInt(document.getElementById('guessInput').value, 10);
-  if (isNaN(guess) || guess < state.min || guess > state.max) {
-    showToast(`Digite um numero entre ${state.min} e ${state.max}!`, 'error');
+  if (Number.isNaN(guess) || guess < state.min || guess > state.max) {
+    showToast(`Digite um numero entre ${state.min} e ${state.max}.`, 'error');
     return;
   }
 
   state.attempts++;
-  document.getElementById('guessAttempts').textContent  = state.attempts;
-  document.getElementById('guessProgress').style.width  = `${(state.attempts / state.maxAttempts) * 100}%`;
+  state.lastGuess = guess;
 
-  const hint = document.getElementById('guessHint');
-  hint.style.display = 'block';
-
-  _applyTemperature(guess);
+  document.getElementById('guessAttempts').textContent = `${state.attempts} / ${state.maxAttempts}`;
+  document.getElementById('guessProgress').style.width = `${(state.attempts / state.maxAttempts) * 100}%`;
+  updateLastGuessLabel();
+  applyTemperature(guess);
 
   if (guess === state.target) {
-    hint.textContent = `Correto! Voce encontrou ${state.target} em ${state.attempts} tentativas!`;
-    hint.className   = 'hint correct';
-    state.active     = false;
+    state.lowerBound = guess;
+    state.upperBound = guess;
+    updateRangeLabel();
+
+    setHint(
+      'Correto!',
+      `Voce encontrou ${state.target} em ${state.attempts} tentativas.`,
+      'emoji_events',
+      'bg-emerald-500/15 text-emerald-500'
+    );
+
+    state.active = false;
     audio.playWin();
     addStat('numberGuess', true, state.attempts);
     checkAchievements('numberGuess', state.attempts);
-    _resetTemperature();
-    return;
-  }
-
-  if (state.attempts >= state.maxAttempts) {
-    hint.textContent = `Game Over! O numero era ${state.target}`;
-    hint.className   = 'hint too-high';
-    state.active     = false;
-    audio.play('error');
-    addStat('numberGuess', false);
+    updateBest();
+    resetTemperature();
     document.getElementById('guessInput').value = '';
     return;
   }
 
-  const range     = state.max - state.min;
-  const proximity = 1 - Math.abs(guess - state.target) / range;
-  const higher    = guess > state.target;
+  if (guess < state.target) {
+    state.lowerBound = Math.max(state.lowerBound, guess + 1);
+  } else {
+    state.upperBound = Math.min(state.upperBound, guess - 1);
+  }
+  updateRangeLabel();
 
-  let emoji, text;
-  if (proximity > 0.88)      { emoji = '🔥🔥'; text = higher ? 'Quente demais! Um pouco menor.' : 'Quente demais! Um pouco maior.'; }
-  else if (proximity > 0.72) { emoji = '♨️';  text = higher ? 'Quente! Tente menor.'           : 'Quente! Tente maior.';          }
-  else if (proximity > 0.50) { emoji = '😐';  text = higher ? 'Morno. Vai menor.'              : 'Morno. Vai maior.';             }
-  else                        { emoji = '🧊';  text = higher ? 'Frio! Muito alto.'              : 'Frio! Muito baixo.';            }
+  if (state.attempts >= state.maxAttempts) {
+    setHint(
+      'Fim de jogo',
+      `O numero certo era ${state.target}.`,
+      'cancel',
+      'bg-red-500/15 text-red-500'
+    );
 
-  hint.textContent = `${emoji} ${text}`;
-  hint.className   = `hint ${higher ? 'too-high' : 'too-low'}`;
+    state.active = false;
+    audio.play('error');
+    addStat('numberGuess', false);
+    document.getElementById('guessInput').value = '';
+    resetTemperature();
+    return;
+  }
+
+  const proximity = 1 - Math.abs(guess - state.target) / (state.max - state.min);
+  const guessIsLow = guess < state.target;
+
+  let description = `A faixa agora vai de ${state.lowerBound} a ${state.upperBound}.`;
+  let toneClasses = 'bg-blue-500/15 text-blue-500';
+  let icon = guessIsLow ? 'keyboard_double_arrow_up' : 'keyboard_double_arrow_down';
+
+  if (proximity >= 0.82) {
+    description = `Muito perto. Tente um numero ${guessIsLow ? 'maior' : 'menor'}.`;
+    toneClasses = 'bg-red-500/15 text-red-500';
+    icon = guessIsLow ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
+  } else if (proximity >= 0.62) {
+    description = `Voce esquentou. Tente um numero ${guessIsLow ? 'maior' : 'menor'}.`;
+    toneClasses = 'bg-amber-500/15 text-amber-500';
+    icon = guessIsLow ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
+  }
+
+  setHint(
+    guessIsLow ? 'Maior!' : 'Menor!',
+    description,
+    icon,
+    toneClasses
+  );
 
   audio.play('click');
   document.getElementById('guessInput').value = '';
 }
 
 export function initNumberGuess() {
-  document.getElementById('guessSubmit').addEventListener('click', _submitGuess);
-  document.getElementById('guessInput').addEventListener('keypress', e => {
-    if (e.key === 'Enter') _submitGuess();
+  document.getElementById('guessSubmit').addEventListener('click', submitGuess);
+  document.getElementById('guessInput').addEventListener('keypress', event => {
+    if (event.key === 'Enter') submitGuess();
   });
   document.getElementById('guessNewGame').addEventListener('click', newGame);
 
-  const best = stats.games.numberGuess.bestAttempts;
-  if (best) document.getElementById('guessBest').textContent = best;
-
+  updateBest();
   newGame();
 }
